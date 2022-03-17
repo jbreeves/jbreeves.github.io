@@ -79,7 +79,7 @@ _Can you keep a secret?_
 - `verifytoken.js` shows that no encryption algorithm is specified (possible to change?)
 - Two hidden items in `local-web` - `.git` and `.env`
 	- `.env` has the Token `secret` in it!
-		```
+		```shell_session
 		┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
 		└─$ ls -la
 		total 116
@@ -271,10 +271,10 @@ _Can you keep a secret?_
 ## 8. Abusing /api/logs
 
 - You can query http://10.10.11.120/api/logs as admin and execute commands through index.js which includes an `exec()` call.
-- Requests must be URL encoded (I used https://gchq.github.io/CyberChef/ for this)
+- Requests must be URL encoded (I used [CyberChef](https://gchq.github.io/CyberChef/) for this)
 - You can run the following request to read /etc/passwd
 	```
-	http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwd
+	http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwdpo;iok
 	```
 - Reading /etc/passwd gives you the name of the non-standard user `dasith`
 
