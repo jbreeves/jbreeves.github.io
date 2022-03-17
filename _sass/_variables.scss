@@ -1,0 +1,52 @@
+
+//
+// VARIABLES
+//
+
+// Colors
+$lightBlue: #77C9D4;
+$blue: #4183C4;
+$prussianBlue: #040505;
+$ink: #062F4F;
+$gold: #D9B310;
+$ember: #B82601;
+$lightPurple: #813772;
+$purple: #841983;
+$darkPurple: #49274A;
+$lightGreen: #3CC47C;
+$green: #007849;
+$darkGreen: #1E392A;
+$beige: #E9C893;
+$orange: #F19F4D;
+$darkOrange: #E37222;
+$stormy: #494E6B;
+$cloud: #98878F;
+$sunset: #985E6D;
+$evening: #192231;
+$lightGray: #A9A9A9;
+
+// Antique Tones
+$bluebell: #155765;
+$olive: #57652A;
+$ornate: #AB9353;
+$plum: #4D2C3D;
+
+// Grays
+$black: #000;
+$darkerGray: #222;
+$darkGray: #333;
+$gray: #666;
+$offwhite: #eee;
+$white: #fff;
+
+// Font stacks
+$helvetica: Helvetica, Arial, sans-serif;
+$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$georgia: Georgia, serif;
+
+// Mobile breakpoints
+@mixin mobile {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}
