@@ -3,5 +3,5 @@ layout: tagpage
 title: "Tag: Tomcat"
 tag: Tomcat
 robots: noindex
-permalink: /Tomcat/
+permalink: /tags/Tomcat/
 ---
