@@ -1,2 +1,6 @@
-tag-name: CTF
+---
+layout: tagpage
+title: "Tag: CTF"
+tag: CTF
+robots: noindex
 ---

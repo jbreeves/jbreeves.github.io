@@ -1,2 +1,6 @@
-tag-name: Docker
+---
+layout: tagpage
+title: "Tag: Docker"
+tag: Docker
+robots: noindex
 ---
