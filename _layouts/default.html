@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
-    {% if site.tags != "" %}
-    {% include collecttags.html %}
-    {% endif %}
   
     {% include meta.html %}
 
@@ -32,6 +30,7 @@
           <nav>
             <a href="{{ site.baseurl }}/">Blog</a>
             <a href="{{ site.baseurl }}/about">About</a>
+            <a href="{{ site.baseurl }}/tags">Tags</a>
           </nav>
         </header>
       </div>
