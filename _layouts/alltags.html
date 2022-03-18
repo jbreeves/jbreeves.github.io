@@ -13,7 +13,7 @@ layout: default
           <a class="tag-link"
             href={{ site.baseurl | append: "/tags/" | append: tag_slug | append: "/" }}
             rel="category tag">
-            #{{ tag['name'] }} ({{ tag['count'] }})
+            {{ tag['name'] }} ({{ tag['count'] }})
           </a>
         </li>
       {% endfor %}
