@@ -4,11 +4,11 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+I'm a gal of many interests who made Information Security my vocation.
 
 ### More Information
 
-A place to include any other types of information that you'd like to include about yourself.
+I have three adorable cats - Jazz, Ramadi, and Baxter.
 
 ### Contact me
 
