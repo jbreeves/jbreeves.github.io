@@ -4,13 +4,13 @@ title: PicoCTF - Nice Netcat
 tags: CTF picoCTF Python
 ---
 
-AcousticGirl
+AcousticGirl  
 March 30, 2022
 
 -------
 
 ## Challenge
-Points - 15
+Points - 15  
 Category - General Skills
 
 ## Description
