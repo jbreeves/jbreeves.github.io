@@ -1,7 +1,7 @@
 ---
 layout: post
 title: PicoCTF - Nice Netcat
-tags: CTF picoCTF Netcat
+tags: CTF picoCTF Python
 ---
 
 AcousticGirl
@@ -10,6 +10,10 @@ March 30, 2022
 -------
 
 ## Challenge
+Points - 15
+Category - General Skills
+
+## Description
 There is a nice program that you can talk to by using this command in a shell: 
 ```
 $ nc mercury.picoctf.net 43239
