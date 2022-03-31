@@ -9,9 +9,8 @@ From: picoCTF 2022
 -------
 
 ## Challenge
-| Points |   Category   | 
-| ------ | ------------ |
-|   100  | Cryptography | 
+Points - 100     
+Category - Cryptography     
 
 ## Description
 We found a leak of a blackmarket website's login credentials. Can you find the password of the user cultiris and successfully decrypt it? 
