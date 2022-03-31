@@ -26,13 +26,13 @@ The first user in usernames.txt corresponds to the first password in passwords.t
     - cvpbPGS{P7e1S_54I35_71Z3}
 3. Use the [monoalphabetic substitution cipher decoder](https://www.dcode.fr/monoalphabetic-substitution) in manual mode
     - We can extrapolate the first section of the flag as picoCTF. 
-        - That gives us the following:
-            B = O
-            C = P
-            G = T
-            P = C
-            S = F
-            V = I
+        - That gives us the following:    
+            B = O    
+            C = P    
+            G = T    
+            P = C    
+            S = F    
+            V = I    
         - If you chart it out and start two spaces before C, you will see that the alphabet has been rotated 13 spaces (Ceasar Cipher).
        
 ## Flag
