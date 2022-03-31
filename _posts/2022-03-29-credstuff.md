@@ -20,7 +20,7 @@ Download the leak [here](https://artifacts.picoctf.net/c/534/leak.tar).
 The first user in usernames.txt corresponds to the first password in passwords.txt. The second user corresponds to the second password, and so on.
 
 ## Methodology
-1. Download the file and extract it
+1. Download the file and extract it   
     `tar -xvf leak.tar`
 2. Find the line where `cultiris` is the username in `usernames.txt`. Find the corresponding line in `passwords.txt` and extract the encoded password.
     - cvpbPGS{P7e1S_54I35_71Z3}
