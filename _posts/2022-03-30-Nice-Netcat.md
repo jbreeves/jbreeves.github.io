@@ -21,7 +21,7 @@ but it doesn't speak English...
 ## Netcat Session
 The netcat session spits out several numbers and then disconnects.
 
-```
+```shell
 └─$ nc mercury.picoctf.net 43239
 112 
 105 

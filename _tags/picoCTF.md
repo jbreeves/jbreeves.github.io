@@ -1,6 +1,6 @@
 ---
 layout: tagpage
-title: "Tag: SMB"
-tag: SMB
+title: "Tag: picoCTF"
+tag: picoCTF
 robots: noindex
 ---

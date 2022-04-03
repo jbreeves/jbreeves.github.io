@@ -70,7 +70,7 @@ Apache Tomcat 9.0.30
 8. Priv Esc / SSH (part 2)
 - Logged in as `merlin` user with password recovered in step 7
 - Ran `sudo -l` to ascertain if merlin has sudo privs and he does!
-	```
+	```shell
 	merlin@ubuntu:~$ sudo -l
 	Matching Defaults entries for merlin on ubuntu:
 	    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin

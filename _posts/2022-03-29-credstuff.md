@@ -33,8 +33,9 @@ The first user in usernames.txt corresponds to the first password in passwords.t
             P = C    
             S = F    
             V = I    
-        - If you chart it out and start two spaces before C, you will see that the alphabet has been rotated 13 spaces (Ceasar Cipher).
-       
+        - If you chart it out and start two spaces before C, you will see that the alphabet has been rotated 13 spaces (Ceasar Cipher).    
+            N O P Q R S T U V W X Y Z A B C D E F G H I J K L M    
+            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 ## Flag
 ```
 picoCTF{C##############3}
